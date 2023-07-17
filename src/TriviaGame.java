@@ -2,6 +2,7 @@ package src;
 
 import src.Question;
 
+import java.util.Collections;
 import java.util.List;
 
 public class TriviaGame {
@@ -13,6 +14,9 @@ public class TriviaGame {
         //read questions from file
         questions= questionReader(questions.text);
         //this is a method that reads the questions from a file
+
+        //shuffle the questions
+        Collections.shuffle(questions);
 
         //create a list of questions
         //shuffle the list
@@ -36,6 +40,13 @@ public class TriviaGame {
 
     public void updateScore() {
 
+    }
+    //Ali is fucked up
+    public void saveCurrentState(){
+        //save the current state of the game
+        //save the score
+        //save the current question
+        //save the list of questions
     }
 
 

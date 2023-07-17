@@ -1,3 +1,9 @@
+package src;
+
+import src.Question;
+
+import java.util.List;
+
 public class TriviaGame {
 
     private int score;
@@ -6,9 +12,9 @@ public class TriviaGame {
 
     public void displayQuestion() {
         if (currentQuestion != null) {
-            System.out.println("Question: " + currentQuestion.getAnswerOptions());
+            System.out.println("Question: " + currentQuestion.getQuestionText());
 
-            List<String> answerOptions = currentQuestion.getAnswerOptions();
+            List<String> answerOptions = currentQuestion.getChoices();
 
             for (int i = 0; i < answerOptions.size(); i++) {
                 System.out.println((i + 1) + ". " + answerOptions.get(i));

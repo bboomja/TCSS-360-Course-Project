@@ -4,6 +4,7 @@ import src.Question;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class TriviaGame {
 
@@ -62,7 +63,28 @@ public class TriviaGame {
             System.out.println("No question available.");
         }
     }
-    //Ali is fucked up
+
+    public boolean submitAnswer(int choice) {
+        // Fetch the current question
+        int currentQuestionIndex;
+        Question currentQuestion = questions.get(currentQuestionIndex);
+
+        // Check if the user's choice matches the correct answer
+        boolean isCorrect = choice == currentQuestion.getCorrectAnswerIndex();
+
+        // If the answer is correct, update the score
+        if (isCorrect) {
+            updateScore();
+        }
+
+        // Move to the next question regardless of whether the answer was correct
+        currentQuestionIndex++;
+
+        // Return whether the answer was correct
+        return isCorrect;
+    }
+    
+    
     public void saveCurrentState(){
         //save the current state of the game
         //save the score

@@ -24,5 +24,13 @@ public class Question {
     public boolean checkAnswers(int choice) {
         return choice == correctAnswer;
     }
+
+    public int getCorrectAnswerIndex() {
+        return correctAnswerIndex;
+    }
+
+    public void setCorrectAnswerIndex(int correctAnswerIndex) {
+        this.correctAnswerIndex = correctAnswerIndex;
+    }
 }
 

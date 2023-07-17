@@ -34,5 +34,9 @@ public class TriviaGame {
         }
     }
 
+    public void updateScore() {
+
+    }
+
 
 }

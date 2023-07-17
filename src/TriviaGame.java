@@ -17,11 +17,15 @@ public class TriviaGame {
 
         //shuffle the questions
         Collections.shuffle(questions);
+        // Shuffle the list of questions
+        Collections.shuffle(questionList);
 
-        //create a list of questions
-        //shuffle the list
-        //set score to 0
-        //set current question to first question in list
+        // Set initial score to 0
+        score = 0;
+
+
+
+
     }
 
     public void displayQuestion() {
@@ -62,9 +66,11 @@ public class TriviaGame {
             System.out.println("No question available.");
         }
     }
-    //Ali is fucked up
+
     public void saveCurrentState(){
         //save the current state of the game
+        // Set current question to the first question in the shuffled list
+        currentQuestion = questionList.get(0);
         //save the score
         //save the current question
         //save the list of questions

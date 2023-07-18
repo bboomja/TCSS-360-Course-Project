@@ -1,6 +1,6 @@
-package src;
+package src.controller;
 
-import src.Question;
+import src.model.Question;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;

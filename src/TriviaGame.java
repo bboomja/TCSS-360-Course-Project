@@ -15,19 +15,16 @@ public class TriviaGame {
     private List<Question> questions;
     public void startGame(){
         //read questions from file
-        questions= questionReader(questions.text);
+        questions= submitAnswer(questions.text);
         //this is a method that reads the questions from a file
 
         //shuffle the questions
         Collections.shuffle(questions);
         // Shuffle the list of questions
-        Collections.shuffle(questionList);
+        Collections.shuffle(questions);
 
         // Set initial score to 0
         score = 0;
-
-
-
 
     }
 
@@ -57,7 +54,7 @@ public class TriviaGame {
         int userChoice = getUserChoice();
 
         if (currentQuestion != null) {
-            boolean isCorrect = currentQuestion.checkAnswer(userChoice);
+            boolean isCorrect = currentQuestion.checkAnswers(userChoice);
 
             if (isCorrect) {
                 score ++; // Increment the score if the user's answer is correct
@@ -70,10 +67,30 @@ public class TriviaGame {
         }
     }
 
+    public boolean submitAnswer(int choice) {
+        // Fetch the current question
+        Question currentQuestion = questions.get(score);
+
+        // Check if the user's choice matches the correct answer
+        boolean isCorrect = choice == currentQuestion.checkAnswers();
+
+        // If the answer is correct, update the score
+        if (isCorrect) {
+            updateScore();
+        }
+
+        // Move to the next question regardless of whether the answer was correct
+        score++;
+
+        // Return whether the answer was correct
+        return isCorrect;
+    }
+
+
     public void saveCurrentState(){
         //save the current state of the game
         // Set current question to the first question in the shuffled list
-        currentQuestion = questionList.get(0);
+        currentQuestion = questions.get(0);
         //save the score
         //save the current question
         //save the list of questions

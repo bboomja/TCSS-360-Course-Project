@@ -25,12 +25,12 @@ public class Question {
         return choice == correctAnswer;
     }
 
-    public int getCorrectAnswerIndex() {
-        return correctAnswerIndex;
-    }
-
-    public void setCorrectAnswerIndex(int correctAnswerIndex) {
-        this.correctAnswerIndex = correctAnswerIndex;
-    }
+//    public int getCorrectAnswerIndex() {
+//        return correctAnswerIndex;
+//    }
+//
+//    public void setCorrectAnswerIndex(int correctAnswerIndex) {
+//        this.correctAnswerIndex = correctAnswerIndex;
+//    }
 }
 

@@ -102,7 +102,7 @@ public class TriviaGame {
         int userChoice = getUserChoice();
 
         if (currentQuestion != null) {
-            boolean isCorrect = currentQuestion.checkAnswer(userChoice);
+            boolean isCorrect = currentQuestion.checkAnswers(userChoice);
 
             if (isCorrect) {
                 score ++; // Increment the score if the user's answer is correct

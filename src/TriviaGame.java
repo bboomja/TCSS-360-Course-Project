@@ -1,9 +1,12 @@
 package src;
 
 import src.Question;
-
+//@author : yaxyeM, HyunJ, ShuaibA
+//@version Summer 2023.
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
+
 
 public class TriviaGame {
 

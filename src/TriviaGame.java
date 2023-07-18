@@ -1,13 +1,18 @@
 package src;
 
 import src.Question;
-//@author : yaxyeM, HyunJ, ShuaibA
-//@version Summer 2023.
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * This class manages a trivia game.
+ * It provides fuctionalities such as starting the game,
+ * displaying questions, and updating the score.
+ *
+ * @author yaxyeM, HyunJ, ShauaibA
+ * @version Summer 2023
+ */
 public class TriviaGame {
 
     private int score;

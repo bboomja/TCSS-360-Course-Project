@@ -10,7 +10,7 @@ import java.util.Scanner;
  * It provides fuctionalities such as starting the game,
  * displaying questions, and updating the score.
  *
- * @author yaxyeM, HyunJ, ShauaibA
+ * @author yaxyeM, HyunJ, ShuaibA
  * @version Summer 2023
  */
 public class TriviaGame {
@@ -114,6 +114,31 @@ public class TriviaGame {
             System.out.println("No question available.");
         }
     }
+
+    /**
+     * @param choice The user's answer choice
+     * @return
+     */
+    public boolean submitAnswer(int choice) {
+        // Fetch the current question
+        Question currentQuestion = questions.get(currentQuestion);
+
+        // Check if the user's choice matches the correct answer
+        boolean isCorrect = choice == currentQuestion.currentQuestion();
+
+        // If the answer is correct, update the score
+        if (isCorrect) {
+            updateScore();
+        }
+
+        // Move to the next question regardless of whether the answer was correct
+        currentQuestion++;
+
+        // Return whether the answer was correct
+        return isCorrect;
+    }
+
+
 
     public void saveCurrentState(){
         if (!questions.isEmpty()) {

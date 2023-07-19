@@ -62,6 +62,7 @@ public class TriviaGame {
                 displayMainMenu();
         }
     }
+    // need to put in UML diagram
     private void displayInstructions(){
         System.out.println("Instructions");
         System.out.println("------------");
@@ -76,6 +77,14 @@ public class TriviaGame {
         displayMainMenu();
     }
 
+    /**
+     * Displays the current question to the player.
+     * If there is a valid current question, it prints the question text
+     * along with the answer options.
+     * The answer options are numbered starting from 1.
+     * If there is no current question available, it prints a message
+     * indicating the absense of a question.
+     */
     public void displayQuestion() {
         if (currentQuestion != null) {
             System.out.println("Question: " + currentQuestion.getQuestionText());
@@ -140,7 +149,7 @@ public class TriviaGame {
 
 
 
-    public void saveCurrentState(){
+    public void save(){
         if (!questions.isEmpty()) {
             // Save the current question
             currentQuestion = questions.get(0);

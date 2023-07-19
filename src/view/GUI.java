@@ -1,4 +1,4 @@
-package src.veiw;
+package src.view;
 
 public class GUI {
 }

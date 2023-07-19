@@ -62,7 +62,7 @@ public class TriviaGame {
                 displayMainMenu();
         }
     }
-    // need to put in UML diagram
+    // need to put in the UML diagram
     private void displayInstructions(){
         System.out.println("Instructions");
         System.out.println("------------");

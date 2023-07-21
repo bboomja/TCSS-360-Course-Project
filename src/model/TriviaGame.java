@@ -21,6 +21,8 @@ import java.util.Scanner;
  */
 
 public class TriviaGame {
+    Theme historyTheme = new Theme("/path/to/your/parchment/background/image", "History");
+
 
     private int score;
     private Question currentQuestion;

@@ -12,7 +12,7 @@ public class GUI {
         triviaGame.startGame();
         JFrame frame = new JFrame("Trivia Maze");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 1000);
+        frame.setSize(800,  800);
         frame.setVisible(true);
         frame.setLayout(new BorderLayout());
         JPanel panel = new JPanel();

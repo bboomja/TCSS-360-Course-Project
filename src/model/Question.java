@@ -54,6 +54,10 @@ public class Question {
         return choice == correctAnswer;
     }
 
+    public int getAnswer() {
+        return 0;
+    }
+
 //    public int getCorrectAnswerIndex() {
 //        return correctAnswerIndex;
 //    }

@@ -5,40 +5,45 @@ import src.model.Question;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * This class manages a trivia game.
- * It provides fuctionalities such as starting the game,
+ * It provides functionalities such as starting the game,
  * displaying questions, and updating the score.
  *
  * @author yaxyeM, HyunJ, ShuaibA
  * @version Summer 2023
  */
+
 public class TriviaGame {
 
     private int score;
     private Question currentQuestion;
     private List<Question> questions;
-    public void startGame(){
-        displayQuestion();
-        displayMainMenu();
 
-        //read questions from file
-        questions= questionReader(question.txt);
-        //this is a method that reads the questions from a file
+    public void startGame() {
+        // read questions from file
+        try {
+            questions = questionReader("question.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        //shuffle the questions
+        // shuffle the questions
         Collections.shuffle(questions);
-        // Shuffle the list of questions
-        Collections.shuffle(questionList);
 
-        // Set initial score to 0
+        // set initial score to 0
         score = 0;
 
+        // display main menu
+        displayMainMenu();
     }
+
     private void displayMainMenu() {
         System.out.println("Welcome to Trivia Maze!");
         System.out.println("------------------------");
@@ -52,7 +57,7 @@ public class TriviaGame {
 
         switch (choice) {
             case 1:
-                startGame();
+                displayQuestion();
                 break;
             case 2:
                 displayInstructions();
@@ -66,6 +71,7 @@ public class TriviaGame {
                 displayMainMenu();
         }
     }
+
     // need to put in the UML diagram
     private void displayInstructions(){
         System.out.println("Instructions");
@@ -81,7 +87,6 @@ public class TriviaGame {
         displayMainMenu();
     }
 
-
     /**
      * Displays the current question to the player.
      * If there is a valid current question, it prints the question text
@@ -90,8 +95,10 @@ public class TriviaGame {
      * If there is no current question available, it prints a message
      * indicating the absense of a question.
      */
+
     public void displayQuestion() {
-        if (currentQuestion != null) {
+        if (questions.size() > 0) {
+            currentQuestion = questions.get(0);
             System.out.println("Question: " + currentQuestion.getQuestionText());
 
             List<String> answerOptions = currentQuestion.getChoices();
@@ -103,15 +110,13 @@ public class TriviaGame {
             System.out.println("No question available.");
         }
     }
-    //helper method
+
     private List<Question> questionReader(String questionFile) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader(questionFile));
+        List<Question> questions = new ArrayList<>();
+        // Load your questions into the questions List here...
 
-
-        bufferedReader br = new BufferedReader(new FileReader(questionFile));
-
-
-        //create a list of questions
-        //return the list of questions
+        return questions;
     }
 
     /**
@@ -122,6 +127,7 @@ public class TriviaGame {
      * Otherwise, the score remains unchanged.
      * The updated score is displayed to the player.
      */
+
     public void updateScore() {
         int userChoice = getUserChoice();
 
@@ -143,12 +149,13 @@ public class TriviaGame {
      * @param choice The user's answer choice
      * @return
      */
+
     public boolean submitAnswer(int choice) {
         // Fetch the current question
-        Question currentQuestion = questions.get(currentQuestion);
+        currentQuestion = questions.get(0);
 
         // Check if the user's choice matches the correct answer
-        boolean isCorrect = choice == currentQuestion.currentQuestion();
+        boolean isCorrect = choice == currentQuestion.getAnswer();
 
         // If the answer is correct, update the score
         if (isCorrect) {
@@ -156,21 +163,16 @@ public class TriviaGame {
         }
 
         // Move to the next question regardless of whether the answer was correct
-        currentQuestion++;
+        questions.remove(currentQuestion);
 
         // Return whether the answer was correct
         return isCorrect;
     }
 
-
-
-    public void save(){
+    public void save() {
         if (!questions.isEmpty()) {
-            // Save the current question
             currentQuestion = questions.get(0);
-            // Save the list of questions
             questions = questions.subList(1, questions.size());
-            // For simplicity, we assume the current question is removed from the list of questions
             questions.remove(0);
         } else {
             System.out.println("No questions available.");
@@ -183,11 +185,12 @@ public class TriviaGame {
      *
      * @return The user's answer choice as an integer
      */
+
     private int getUserChoice() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter your answer choice: ");
-        int choice = sc.nextInt();
-        return choice;
+        int userChoice = sc.nextInt();
+        return userChoice;
     }
 
 }

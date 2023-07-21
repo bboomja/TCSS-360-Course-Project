@@ -1,6 +1,10 @@
 package src.controller;
 
 import src.model.Question;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -20,10 +24,10 @@ public class TriviaGame {
     private List<Question> questions;
     public void startGame(){
         displayQuestion();
-        displayMenu();
+        displayMainMenu();
 
         //read questions from file
-        questions= questionReader(questions.text);
+        questions= questionReader(question.txt);
         //this is a method that reads the questions from a file
 
         //shuffle the questions
@@ -77,6 +81,7 @@ public class TriviaGame {
         displayMainMenu();
     }
 
+
     /**
      * Displays the current question to the player.
      * If there is a valid current question, it prints the question text
@@ -97,6 +102,16 @@ public class TriviaGame {
         } else {
             System.out.println("No question available.");
         }
+    }
+    //helper method
+    private List<Question> questionReader(String questionFile) throws FileNotFoundException {
+
+
+        bufferedReader br = new BufferedReader(new FileReader(questionFile));
+
+
+        //create a list of questions
+        //return the list of questions
     }
 
     /**

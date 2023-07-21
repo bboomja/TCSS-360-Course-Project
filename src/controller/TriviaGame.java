@@ -1,6 +1,7 @@
-package src.model;
+package src.controller;
 
 import src.model.Question;
+import src.model.Theme;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

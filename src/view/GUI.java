@@ -1,6 +1,7 @@
 package src.view;
 
-import src.model.*;
+import src.controller.TriviaGame;
+
 import java.awt.*;
 import javax.swing.*;
 

@@ -7,7 +7,7 @@ import java.util.List;
  * The Maze class represents the main game environment where the player navigates.
  */
 public class Maze {
-    private Map map;
+    //private Map map;
     private Player player;
     private Theme theme;
     private List<Room> rooms;
@@ -24,9 +24,9 @@ public class Maze {
      *
      * @param map The map to be used in the maze.
      */
-    public void setMap(Map map) {
-        this.map = map;
-    }
+//    public void setMap(Map map) {
+//        this.map = map;
+//    }
 
     /**
      * Sets the player for the maze.

@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * This class manages a trivia game.
@@ -22,12 +19,32 @@ import java.util.Scanner;
  */
 
 public class TriviaGame {
+
+    private ThemeController themeController;
+    private QuestionController questionController;
+    private ScoreController scoreController;
+    private GameController gameController;
+
+    private UserController userController;
     Theme historyTheme = new Theme("/path/to/your/parchment/background/image", "History");
 
 
     private int score;
     private Question currentQuestion;
     private List<Question> questions;
+
+//    public TriviaGame() {
+//        this.themeController = new ThemeController(defaultTheme);
+//        this.scoreController = new ScoreController();
+//        this.questionController = new QuestionController();
+//        this.gameController = new GameController(questionController, scoreController, themeController);
+//        try {
+//            questionController.loadQuestions(questionsFilePath);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        questionController.shuffleQuestions();
+//    }
 
     public void startGame() {
         // read questions from file
@@ -117,10 +134,22 @@ public class TriviaGame {
     private List<Question> questionReader(String questionFile) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(questionFile));
         List<Question> questions = new ArrayList<>();
-        // Load your questions into the questions List here...
-
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(";");
+                String questionText = parts[0];
+                List<String> choices = Arrays.asList(parts[1].split(","));
+                int correctAnswerIndex = Integer.parseInt(parts[2]);
+                Question question = new Question(questionText, choices, correctAnswerIndex);
+                questions.add(question);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return questions;
     }
+
 
     /**
      * Updates the player's score based on the correctness of their answer.

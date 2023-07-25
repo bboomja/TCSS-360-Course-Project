@@ -62,6 +62,12 @@ public class TriviaGame {
         System.out.print("Please enter your choice (1, 2, or 3): ");
 
         Scanner scanner = new Scanner(System.in);
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.next();
+        }
+
         int choice = scanner.nextInt();
 
         switch (choice) {
@@ -109,7 +115,7 @@ public class TriviaGame {
         currentQuestionIndex++;
     }
 
-    public boolean checkAnswer(int userChoice) {
+    public boolean isAnswerCorrect(int userChoice) {
         if (hasQuestions()) {
             Question currentQuestion = getCurrentQuestion();
             return (currentQuestion != null && userChoice == currentQuestion.getCorrectAnswerIndex());
@@ -117,20 +123,17 @@ public class TriviaGame {
         return false;
     }
 
-    public void updateScore(int userChoice) {
-        if (hasQuestions()) {
-            Question currentQuestion = getCurrentQuestion();
-            boolean isCorrect = (currentQuestion != null && userChoice == currentQuestion.getCorrectAnswerIndex());
+    public boolean checkAnswer(int userChoice) {
+        return isAnswerCorrect(userChoice);
+    }
 
-            if (isCorrect) {
+    public void updateScore(int userChoice) {
+            if (isAnswerCorrect(userChoice)) {
                 score++; // Increment the score if the user's answer is correct
                 System.out.println("Correct! Your score is now: " + score);
             } else {
                 System.out.println("Incorrect! Your score remains: " + score);
             }
-        } else {
-            System.out.println("No question available.");
-        }
     }
 
     public int getScore() {

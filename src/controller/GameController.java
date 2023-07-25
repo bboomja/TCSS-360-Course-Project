@@ -1,5 +1,7 @@
 package src.controller;
 
+import java.io.FileNotFoundException;
+
 public class GameController {
     private QuestionController questionController;
     private ScoreController scoreController;
@@ -12,7 +14,11 @@ public class GameController {
     }
 
     public void startGame() {
-        // Implementation goes here...
+        try {
+            questionController.loadQuestions("question.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: Question file not found.");
+        }
     }
 
     public void endGame() {

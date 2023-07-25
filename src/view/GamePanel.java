@@ -26,7 +26,7 @@ public class GamePanel extends JPanel {
         // Create and add buttons to the panel.
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                buttons[i][j] = new JButton("Question " + (i * 5 + j + 1));
+                buttons[i][j] = new JButton("Room " + (i * 5 + j + 1));
                 add(buttons[i][j]);
                 buttons[i][j].addActionListener(new QuestionButtonListener(i, j));
             }

@@ -31,26 +31,45 @@ public class MainMenuPanel extends JPanel {
 
         frame.setLayout(new BorderLayout());
 
-        questionPanel = new JPanel();
-        questionPanel.setLayout(new BorderLayout());
+        // Create a grid of buttons to represent the rooms in the maze
+        JPanel mazePanel = new JPanel();
+        mazePanel.setLayout(new GridLayout(5, 5));
+        JButton[][] roomButtons = new JButton[5][5];
 
-        // Create and add buttons to the panel.
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3, 1));
-
-        JRadioButton[] answerButtons = new JRadioButton[3];
-        ButtonGroup buttonGroup = new ButtonGroup();
-        for (int i = 0; i < 3; i++) {
-            answerButtons[i] = new JRadioButton();
-            buttonGroup.add(answerButtons[i]);
-            buttonPanel.add(answerButtons[i]);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                roomButtons[i][j] = new JButton("Room " + (i * 5 + j + 1));
+                roomButtons[i][j].addActionListener(new RoomButtonListener(i, j));
+                mazePanel.add(roomButtons[i][j]);
+            }
         }
 
-        frame.add(questionPanel, BorderLayout.CENTER);
-        frame.add(buttonPanel, BorderLayout.EAST);
-        displayNextQuestion();
+        frame.add(mazePanel, BorderLayout.CENTER);
 
         frame.setVisible(true);
+    }
+
+    private class RoomButtonListener implements ActionListener {
+        private int row;
+        private int col;
+
+        public RoomButtonListener(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Display the question for the selected room
+            displayQuestion(row, col);
+        }
+    }
+
+    private void displayQuestion(int row, int col) {
+        // Get the question for the selected room and display it
+        String question = triviaGame.getQuestion(row, col);
+        // Display the question and wait for the player's answer
+        // If the player's answer is correct, open the door in that direction
     }
 
     private void setHistoricalTheme(JFrame frame) {

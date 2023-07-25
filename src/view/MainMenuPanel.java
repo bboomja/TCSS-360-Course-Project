@@ -68,9 +68,48 @@ public class MainMenuPanel extends JPanel {
     private void displayQuestion(int row, int col) {
         // Get the question for the selected room and display it
         String question = triviaGame.getQuestion(row, col);
-        // Display the question and wait for the player's answer
-        // If the player's answer is correct, open the door in that direction
+
+        // Remove the maze panel from the frame
+        frame.getContentPane().removeAll();
+
+        // Create a new panel to display the question
+        questionPanel = new JPanel();
+        questionPanel.setLayout(new BorderLayout());
+
+        JLabel questionLabel = new JLabel(question);
+        questionPanel.add(questionLabel, BorderLayout.NORTH);
+
+        // Create a list of answer choices
+        java.util.List<String> choices = triviaGame.getCurrentQuestion().getChoices();
+        String[] choicesArray = choices.toArray(new String[0]);
+        JList<String> answerList = new JList<>(choicesArray);
+        answerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(answerList);
+        questionPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Create a submit button
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = answerList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    int userChoice = selectedIndex + 1;
+                    handleAnswer(userChoice);
+                } else {
+                    // Show a message dialog if no answer is selected
+                    JOptionPane.showMessageDialog(frame, "Please select an answer before submitting.");
+                }
+            }
+        });
+        questionPanel.add(submitButton, BorderLayout.SOUTH);
+
+        // Add the question panel to the frame and refresh
+        frame.add(questionPanel);
+        frame.validate();
+        frame.repaint();
     }
+
 
     private void setHistoricalTheme(JFrame frame) {
         // Set the background color with a fancy historical theme.

@@ -1,4 +1,4 @@
-Who was the first president of the USA?
-when was the World War 2?
-How did Washington state get its name, and what historical figures influenced this decision?
-How did the construction of the Northern Pacific Railroad impact the growth and development of Washington state in the late 19th century?
+Who was the first president of the USA?;George Washington,Thomas Jefferson,John Adams;0
+When was the World War 2?;1914-1918,1939-1945,1941-1945;1
+How did Washington state get its name, and what historical figures influenced this decision?;Option 1,Option 2,Option 3;2
+How did the construction of the Northern Pacific Railroad impact the growth and development of Washington state in the late 19th century?;Option A,Option B,Option C;1

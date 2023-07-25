@@ -1,69 +1,58 @@
 package src.controller;
 
 import src.model.Question;
-import src.model.Theme;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-
-/**
- * This class manages a trivia game.
- * It provides functionalities such as starting the game,
- * displaying questions, and updating the score.
- *
- * @author yaxyeM, HyunJ, ShuaibA
- * @version Summer 2023
- */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class TriviaGame {
-
-    private ThemeController themeController;
-    private QuestionController questionController;
-    private ScoreController scoreController;
-    private GameController gameController;
-
-    private UserController userController;
-    Theme historyTheme = new Theme("/path/to/your/parchment/background/image", "History");
-
-
-    private int score;
-    private Question currentQuestion;
     private List<Question> questions;
+    private int currentQuestionIndex;
+    private int score;
 
-//    public TriviaGame() {
-//        this.themeController = new ThemeController(defaultTheme);
-//        this.scoreController = new ScoreController();
-//        this.questionController = new QuestionController();
-//        this.gameController = new GameController(questionController, scoreController, themeController);
-//        try {
-//            questionController.loadQuestions(questionsFilePath);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        questionController.shuffleQuestions();
-//    }
+    public TriviaGame() {
+        this.questions = new ArrayList<>();
+        this.currentQuestionIndex = 0;
+        this.score = 0;
+    }
 
     public void startGame() {
-        // read questions from file
-        try {
-            questions = questionReader("question.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        displayMainMenu();
+
 
         // shuffle the questions
         Collections.shuffle(questions);
-
-        // set initial score to 0
-        score = 0;
-
-        // display main menu
-        displayMainMenu();
     }
+    public void askQuestion() {
 
+        questions.add(new Question("Who was the first president of the USA?",
+                List.of("George Washington", "Thomas Jefferson", "John Adams"), 0, "Explanation 1"));
+        questions.add(new Question("When was the World War 2?",
+                List.of("1914-1918", "1939-1945", "1941-1945"), 1, "Explanation 2"));
+        questions.add(new Question("How did Washington state get its name, and what historical figures influenced this decision?",
+                List.of("Option 1", "Option 2", "Option 3"), 2, "Explanation 3"));
+        questions.add(new Question("How did the construction of the Northern Pacific Railroad impact the growth" +
+                " and development of Washington state in the late 19th century?",
+                List.of(
+                        "It facilitated faster transportation of goods and people, leading to economic growth.",
+                        "It had no significant impact on the growth and development of Washington state.",
+                        "It caused environmental damage and negatively affected indigenous communities."
+                ),
+                0, // The correct answer index (0-based index of the correct answer in the list)
+                "Explanation for the correct answer."
+        ));
+        questions.add(new Question("What was the purpose of the Dawes Act of 1887?",
+                List.of(
+                        "To provide land grants to railroad companies.",
+                        "To provide land grants to settlers.",
+                        "To assimilate Native Americans into American society."
+                ),
+                2, // The correct answer index (0-based index of the correct answer in the list)
+                "Explanation for the correct answer."
+        ));
+    }
     private void displayMainMenu() {
         System.out.println("Welcome to Trivia Maze!");
         System.out.println("------------------------");
@@ -77,7 +66,7 @@ public class TriviaGame {
 
         switch (choice) {
             case 1:
-                displayQuestion();
+                askQuestion();
                 break;
             case 2:
                 displayInstructions();
@@ -91,7 +80,6 @@ public class TriviaGame {
                 displayMainMenu();
         }
     }
-
     // need to put in the UML diagram
     private void displayInstructions(){
         System.out.println("Instructions");
@@ -106,123 +94,51 @@ public class TriviaGame {
         System.out.println();
         displayMainMenu();
     }
-
-    /**
-     * Displays the current question to the player.
-     * If there is a valid current question, it prints the question text
-     * along with the answer options.
-     * The answer options are numbered starting from 1.
-     * If there is no current question available, it prints a message
-     * indicating the absense of a question.
-     */
-
-    public void displayQuestion() {
-        if (questions.size() > 0) {
-            currentQuestion = questions.get(0);
-            System.out.println("Question: " + currentQuestion.getQuestionText());
-
-            List<String> answerOptions = currentQuestion.getChoices();
-
-            for (int i = 0; i < answerOptions.size(); i++) {
-                System.out.println((i + 1) + ". " + answerOptions.get(i));
-            }
-        } else {
-            System.out.println("No question available.");
-        }
+    public boolean hasQuestions() {
+        return currentQuestionIndex < questions.size();
     }
 
-    private List<Question> questionReader(String questionFile) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader(questionFile));
-        List<Question> questions = new ArrayList<>();
-        String line;
-        try {
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(";");
-                String questionText = parts[0];
-                List<String> choices = Arrays.asList(parts[1].split(","));
-                int correctAnswerIndex = Integer.parseInt(parts[2]);
-                Question question = new Question(questionText, choices, correctAnswerIndex);
-                questions.add(question);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Question getCurrentQuestion() {
+        if (hasQuestions()) {
+            return questions.get(currentQuestionIndex);
         }
-        return questions;
+        return null;
     }
 
+    public void nextQuestion() {
+        currentQuestionIndex++;
+    }
 
-    /**
-     * Updates the player's score based on the correctness of their answer.
-     * Retrieves the user's answer choice and compares it with the correct answer
-     * stored in the current question.
-     * If the user's answer is correct, the score is incremented by 1.
-     * Otherwise, the score remains unchanged.
-     * The updated score is displayed to the player.
-     */
+    public boolean checkAnswer(int userChoice) {
+        if (hasQuestions()) {
+            Question currentQuestion = getCurrentQuestion();
+            return (currentQuestion != null && userChoice == currentQuestion.getCorrectAnswerIndex());
+        }
+        return false;
+    }
 
-    public void updateScore() {
-        int userChoice = getUserChoice();
-
-        if (currentQuestion != null) {
-            boolean isCorrect = currentQuestion.checkAnswers(userChoice);
+    public void updateScore(int userChoice) {
+        if (hasQuestions()) {
+            Question currentQuestion = getCurrentQuestion();
+            boolean isCorrect = (currentQuestion != null && userChoice == currentQuestion.getCorrectAnswerIndex());
 
             if (isCorrect) {
-                score ++; // Increment the score if the user's answer is correct
+                score++; // Increment the score if the user's answer is correct
                 System.out.println("Correct! Your score is now: " + score);
             } else {
-                System.out.println("Incorrect! Yore score remains: " + score );
+                System.out.println("Incorrect! Your score remains: " + score);
             }
         } else {
             System.out.println("No question available.");
         }
     }
 
-    /**
-     * @param choice The user's answer choice
-     * @return
-     */
-
-    public boolean submitAnswer(int choice) {
-        // Fetch the current question
-        currentQuestion = questions.get(0);
-
-        // Check if the user's choice matches the correct answer
-        boolean isCorrect = choice == currentQuestion.getAnswer();
-
-        // If the answer is correct, update the score
-        if (isCorrect) {
-            updateScore();
-        }
-
-        // Move to the next question regardless of whether the answer was correct
-        questions.remove(currentQuestion);
-
-        // Return whether the answer was correct
-        return isCorrect;
+    public int getScore() {
+        return score;
     }
 
-    public void save() {
-        if (!questions.isEmpty()) {
-            currentQuestion = questions.get(0);
-            questions = questions.subList(1, questions.size());
-            questions.remove(0);
-        } else {
-            System.out.println("No questions available.");
-        }
+    public String getQuestion(int row, int col) {
+        return "Question " + (row * 5 + col + 1);
+
     }
-
-    /**
-     * Helper method.
-     * Retrieves the user's answer choice from the console.
-     *
-     * @return The user's answer choice as an integer
-     */
-
-    private int getUserChoice() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter your answer choice: ");
-        int userChoice = sc.nextInt();
-        return userChoice;
-    }
-
 }

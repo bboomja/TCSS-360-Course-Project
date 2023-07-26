@@ -2,6 +2,8 @@ package src.controller;
 
 import src.model.Question;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,31 +29,12 @@ public class TriviaGame {
     }
     public void askQuestion() {
 
-        questions.add(new Question("Who was the first president of the USA?",
-                List.of("George Washington", "Thomas Jefferson", "John Adams"), 0, "Explanation 1"));
-        questions.add(new Question("When was the World War 2?",
-                List.of("1914-1918", "1939-1945", "1941-1945"), 1, "Explanation 2"));
-        questions.add(new Question("How did Washington state get its name, and what historical figures influenced this decision?",
-                List.of("Option 1", "Option 2", "Option 3"), 2, "Explanation 3"));
-        questions.add(new Question("How did the construction of the Northern Pacific Railroad impact the growth" +
-                " and development of Washington state in the late 19th century?",
-                List.of(
-                        "It facilitated faster transportation of goods and people, leading to economic growth.",
-                        "It had no significant impact on the growth and development of Washington state.",
-                        "It caused environmental damage and negatively affected indigenous communities."
-                ),
-                0, // The correct answer index (0-based index of the correct answer in the list)
-                "Explanation for the correct answer."
-        ));
-        questions.add(new Question("What was the purpose of the Dawes Act of 1887?",
-                List.of(
-                        "To provide land grants to railroad companies.",
-                        "To provide land grants to settlers.",
-                        "To assimilate Native Americans into American society."
-                ),
-                2, // The correct answer index (0-based index of the correct answer in the list)
-                "Explanation for the correct answer."
-        ));
+        QuestionController questionController = new QuestionController();
+        try {
+            questions = questionController.loadQuestions("question.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: Question file not found.");
+        }
     }
     private void displayMainMenu() {
         System.out.println("Welcome to Trivia Maze!");

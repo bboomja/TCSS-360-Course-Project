@@ -1,4 +1,9 @@
 package src.model;
 
-public class Position {
+public enum Position {
+
+    /**
+     * Position for Movements
+     */
+    NORTH, SOUTH, EAST, WEST
 }

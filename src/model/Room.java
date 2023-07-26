@@ -1,60 +1,74 @@
 package src.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.EnumMap;
 
 /**
  * The Room class represents a room in the game.
  * It stores the room's ID and the doors connected to the room.
  */
 public class Room {
-    private String id;
-    private List<Door> doors;
+    private final EnumMap<Direction, Door> doors;
+    private final RoomBlocker myBlockedDoors;
+    private boolean myVisited = false;
 
-    /**
-     * Constructs a Room object with the specified ID.
-     *
-     * @param id the ID of the room
-     */
-    public Room(String id) {
-        this.id = id;
-        this.doors = new ArrayList<>();
+    public Room(final RoomBlocker theBlocker, final Door theNorthDoor,
+                final Door theSouthDoor, final Door theEastDoor,
+                final Door theWestDoor) {
+        myBlockedDoors = theBlocker;
+        doors = new EnumMap<>(Direction.class);
+        setDoor(Direction.NORTH, theNorthDoor);
+        setDoor(Direction.SOUTH, theSouthDoor);
+        setDoor(Direction.EAST, theEastDoor);
+        setDoor(Direction.WEST, theWestDoor);
     }
 
-    /**
-     * Adds a door to the room.
-     *
-     * @param door the door to be added
-     */
-    public void addDoor(Door door) {
-        doors.add(door);
+    private void setDoor(Direction direction, Door door) {
+        if (myBlockedDoors.isBlocked(direction)) {
+            doors.put(direction, door);
+        }
     }
 
-    /**
-     * Removes a door from the room.
-     *
-     * @param door the door to be removed
-     */
-    public void removeDoor(Door door) {
-        doors.remove(door);
+    public void setVisited(final boolean theVisited) {
+        myVisited = theVisited;
     }
 
-    /**
-     * Returns the list of doors in the room.
-     *
-     * @return the list of doors
-     */
-    public List<Door> getDoors() {
-        return doors;
+    public boolean getVisited() {
+        return myVisited;
     }
 
-    /**
-     * Returns the ID of the room.
-     *
-     * @return the ID of the room
-     */
-    public String getId() {
-        return id;
+    public Door getDoor(final Direction direction) {
+        return doors.get(direction);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder roomString = new StringBuilder();
+
+        roomString.append("\n\t\t\t").append(checkMovement(Direction.NORTH));
+        roomString.append("\n\n").append(checkMovement(Direction.WEST));
+        roomString.append("\t\tPlayer\t\t").append(checkMovement(Direction.EAST));
+        roomString.append("\n\n\t\t\t").append(checkMovement(Direction.SOUTH));
+
+        return roomString.toString();
+    }
+
+    private String checkMovement(final Direction direction) {
+        Door door = getDoor(direction);
+        if (door == null) {
+            return "BLOCKED";
+        } else if (door.getDoorState() == Door.DoorState.DEAD) {
+            return "DEAD DOOR";
+        } else {
+            return "MOVE " + direction;
+        }
+    }
+
+    public void undeadRoom() {
+        for (Direction direction : Direction.values()) {
+            Door door = getDoor(direction);
+            if (door != null && door.getDoorState() == Door.DoorState.DEAD) {
+                door.reset();
+            }
+        }
+    }
 }

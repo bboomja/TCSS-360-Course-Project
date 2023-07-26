@@ -1,54 +1,81 @@
 package src.model;
 
 /**
- * The Door class represents a door in the game that connects rooms.
- * It can be locked or unlocked and may have an associated question.
+ * Door is obstacle for the player.
+ * It can opened by havinf the player answer a question.
  */
 public class Door {
-    private Question question;
-    private Room connectedRoom;
-    private boolean isLocked;
+   public enum DoorState {
+       LOCKED,
+       UNLOCKED,
+       DEAD
+   }
 
     /**
-     * Connects the door to a specific room.
+     * The Question and answer of the door.
+     */
+   private Question myQuestion;
+    /**
+     * Variable for the status of the Door.
+     */
+   private DoorState myDoorState;
+
+    /**
+     * Creates a new Door.
+     */
+   public Door() {
+       myDoorState = DoorState.LOCKED;
+       myQuestion = Database.getRandomQuestion();
+   }
+
+    /**
+     * Returns the state of the door.
      *
-     * @param room the room to connect the door to
+     * @return Returns a DoorState enum of the state of the Door
      */
-    public void connectRoom(Room room) {
-        connectedRoom = room;
-    }
+   public DoorState getDoorState() {
+       return myDoorState;
+   }
 
     /**
-     * Locks the door.
-     */
-    public void lock() {
-        isLocked = true;
-    }
-
-    /**
-     * Retrieves the associated question for the door.
+     * Tries to unlock the door with a user answer.
+     * If the answer is correct, the door state changes to UNLOCKED.
+     * If the answer is wrong, the door state changes to DEAD.
      *
-     * @return the question associated with the door
+     * @param theUserAnswer Response that the user gives
      */
-    public Question getQuestion() {
-        return question;
-    }
+   public void attemptUnlock(final String theUserAnswer) {
+       if (myDoorState == DoorState.LOCKED && theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {
+           myDoorState = DoorState.UNLOCKED;
+       } else {
+           myDoorState = DoorState.DEAD;
+       }
+   }
 
     /**
-     * Retrieves the room connected to the door.
+     * Returns the question.
      *
-     * @return the connected room
+     * @return Returns a String of the question
      */
-    public Room getConnectedRoom() {
-        return connectedRoom;
-    }
+   public String getQuestion() {
+       return myQuestion.getQuestion();
+   }
 
     /**
-     * Checks if the door is locked.
+     * Returns the answer.
      *
-     * @return true if the door is locked, false otherwise
+     * @return the answer
      */
-    public boolean isLocked() {
-        return isLocked;
-    }
+   public String getAnswer() {
+       return myQuestion.getAnswer();
+   }
+
+    /**
+     * Resets a dead door to the locked state.
+     */
+   public void reset() {
+       if (myDoorState == DoorState.DEAD) {
+           myDoorState = DoorState.LOCKED;
+       }
+   }
 }

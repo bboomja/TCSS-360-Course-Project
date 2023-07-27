@@ -14,7 +14,7 @@ public class TriviaGame {
     public static void main(String[] args) {
         System.out.println("Current Directory: " + System.getProperty("user.dir"));
         // Connect to the database and load questions
-        Database.connectToDatabase();
+        Database.loadQuestionsFromDatabase();
 
         // Create the maze
         final int mazeSize = 5; // You can change this to any desired maze size

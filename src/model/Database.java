@@ -48,6 +48,13 @@ public class Database {
     }
 
     /**
+     * Loads questions from the database table into the QUESTION_BANK list.
+     */
+    public static void loadQuestionsFromDatabase() {
+        QUESTION_BANK.add(new Question("Who was the first president of the United States?", "George Washington."));
+    }
+
+    /**
      * Returns a random Question object.
      *
      * @return a random Question object from QUESTION_BANK

@@ -71,6 +71,15 @@ public class Door {
    }
 
     /**
+     * Checks if the door is in DEAD state.
+     *
+     * @return true if the door is DEAD, false otherwise.
+     */
+    public boolean isDead() {
+        return myDoorState == DoorState.DEAD;
+    }
+
+    /**
      * Resets a dead door to the locked state.
      */
    public void reset() {

@@ -1,113 +1,185 @@
 package src.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The Maze class represents the main game environment where the player navigates.
  */
 public class Maze {
-    //private Map map;
-    private Player player;
-    private Theme theme;
-    private List<Room> rooms;
+    private static final int NORTH_DOOR_INDEX = 0;
+    private static final int SOUTH_DOOR_INDEX = 1;
+    private static final int EAST_DOOR_INDEX = 2;
+    private static final int WEST_DOOR_INDEX = 3;
 
-    /**
-     * Constructor for the Maze class. Initializes the list of rooms.
-     */
-    public Maze() {
-        this.rooms = new ArrayList<>();
+    private int myX;
+    private int myY;
+    private final Room[][] myMaze;
+    private final int mazeSize;
+
+    public Maze(final int size) {
+        mazeSize = size;
+        myX = 0;
+        myY = 0;
+        myMaze = new Room[mazeSize][mazeSize];
+        roomSetup();
     }
 
-    /**
-     * Sets the map for the maze.
-     *
-     * @param map The map to be used in the maze.
-     */
-//    public void setMap(Map map) {
-//        this.map = map;
-//    }
-
-    /**
-     * Sets the player for the maze.
-     *
-     * @param player The player navigating the maze.
-     */
-    public void setPlayer(Player player) {
-        this.player = player;
+    public int getX() {
+        return myX;
     }
 
-    /**
-     * Sets the theme of the maze.
-     *
-     * @param theme The theme to be used in the maze.
-     */
-    public void setTheme(Theme theme) {
-        this.theme = theme;
+    public int getY() {
+        return myY;
     }
 
-    /**
-     * Moves the player in the specified direction.
-     *
-     * @param direction The direction in which to move the player.
-     */
-    public void movePlayer(String direction) {
-        // Implement logic for moving player in the given direction
+    public void setX(final int x) {
+        myX = x;
     }
 
-    /**
-     * Checks if a position in the maze is a wall.
-     *
-     * @param position The position to check.
-     * @return True if the position is a wall, false otherwise.
-     */
-    public boolean isWall(Position position) {
-        // Implement logic to check if a position is a wall
-        return false; // Placeholder return
+    public void setY(final int y) {
+        myY = y;
     }
 
-    /**
-     * Checks if a position in the maze is an exit.
-     *
-     * @param position The position to check.
-     * @return True if the position is an exit, false otherwise.
-     */
-    public boolean isExit(Position position) {
-        // Implement logic to check if a position is an exit
-        return false; // Placeholder return
+    private void roomSetup() {
+        for (int xMazeCoord = 0; xMazeCoord < myMaze.length; xMazeCoord++) {
+            for (int yMazeCoord = 0; yMazeCoord < myMaze[xMazeCoord].length; yMazeCoord++) {
+                assignDoorsAndRoom(xMazeCoord, yMazeCoord);
+            }
+        }
     }
 
-    /**
-     * Displays the current state of the maze.
-     */
-    public void displayMaze() {
-        // Implement logic for displaying the maze
+    private void assignDoorsAndRoom(int xMazeCoord, int yMazeCoord) {
+        boolean west = xMazeCoord - 1 >= 0;
+        boolean south = yMazeCoord < myMaze[xMazeCoord].length - 1;
+        boolean east = xMazeCoord < myMaze.length - 1;
+        boolean north = yMazeCoord > 0;
+
+        Door northDoor = north ? myMaze[xMazeCoord][yMazeCoord - 1].getDoor(Direction.SOUTH) : new Door();
+        Door southDoor = new Door();
+        Door eastDoor = new Door();
+        Door westDoor = west ? myMaze[xMazeCoord - 1][yMazeCoord].getDoor(Direction.EAST) : new Door();
+
+        myMaze[xMazeCoord][yMazeCoord] =
+                new Room(new RoomBlocker(north, south, east, west),
+                        northDoor, southDoor, eastDoor, westDoor);
     }
 
-    /**
-     * Adds a room to the maze.
-     *
-     * @param room The room to be added.
-     */
-    public void addRoom(Room room) {
-        this.rooms.add(room);
+    public void movePlayer(final Direction direction) {
+        if (canMovePlayer(direction)) {
+            switch (direction) {
+                case NORTH -> myY--;
+                case SOUTH -> myY++;
+                case EAST -> myX++;
+                case WEST -> myX--;
+            }
+        }
     }
 
-    /**
-     * Removes a room from the maze.
-     *
-     * @param room The room to be removed.
-     */
-    public void removeRoom(Room room) {
-        this.rooms.remove(room);
+    public boolean canMovePlayer(final Direction direction) {
+        Door localDoor = getCurrentRoom().getDoor(direction);
+        return localDoor != null && !localDoor.isDead();
     }
 
-    /**
-     * Gets the list of rooms in the maze.
-     *
-     * @return A list of rooms in the maze.
-     */
-    public List<Room> getRooms() {
-        return this.rooms;
+    public Room getCurrentRoom() {
+        return myMaze[myX][myY];
+    }
+
+    public boolean isPossible() {
+        for (Room[] rooms : myMaze) {
+            for (Room room : rooms) {
+                room.setVisited(false);
+            }
+        }
+        return isPossibleHelper(myX, myY);
+    }
+
+    private boolean isPossibleHelper(final int x, final int y) {
+        if (!myMaze[x][y].getVisited()) {
+            if (x == mazeSize - 1 && y == mazeSize - 1) {
+                return true;
+            }
+            myMaze[x][y].setVisited(true);
+            for (int directionIndex = 0; directionIndex < 4; directionIndex++) {
+                if (isValidMove(x, y, directionIndex)) {
+                    if (isPossibleHelper(newX(x, directionIndex), newY(y, directionIndex))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isValidMove(int x, int y, int directionIndex) {
+        Direction direction = convertToDirection(directionIndex);
+        Door door = myMaze[x][y].getDoor(direction);
+        return door != null && !door.isDead();
+    }
+
+
+    private Direction convertToDirection(int directionIndex) {
+        switch (directionIndex) {
+            case 0: return Direction.NORTH;
+            case 1: return Direction.SOUTH;
+            case 2: return Direction.EAST;
+            case 3: return Direction.WEST;
+            default: throw new IllegalArgumentException("Invalid direction index");
+        }
+    }
+
+
+    private int newX(int x, int directionIndex) {
+        return switch (directionIndex) {
+            case EAST_DOOR_INDEX -> x + 1;
+            case WEST_DOOR_INDEX -> x - 1;
+            default -> x;
+        };
+    }
+
+    private int newY(int y, int directionIndex) {
+        return switch (directionIndex) {
+            case NORTH_DOOR_INDEX -> y - 1;
+            case SOUTH_DOOR_INDEX -> y + 1;
+            default -> y;
+        };
+    }
+
+    public boolean goalReached() {
+        return myX == mazeSize - 1 && myY == mazeSize - 1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder mazeString = new StringBuilder();
+        for (int i = 0; i < myMaze.length; i++) {
+            mazeString.append("\n");
+            for (int j = 0; j < myMaze[i].length; j++) {
+                mazeString.append(getRoomString(i, j));
+            }
+        }
+        return mazeString.toString();
+    }
+
+    private String getRoomString(int i, int j) {
+        if (i == myY && j == myX) {
+            return "[PLYR]";
+        } else if (i == mazeSize - 1 && j == mazeSize - 1) {
+            return "[FNSH]";
+        } else if (i == 0 && j == 0) {
+            return "[STRT]";
+        } else {
+            return "[ROOM]";
+        }
+    }
+
+    public void moveToEnd() {
+        setX(mazeSize - 1);
+        setY(mazeSize - 1);
+    }
+
+    public void undeadAllRooms() {
+        for (Room[] rooms : myMaze) {
+            for (Room room : rooms) {
+                room.undeadRoom();
+            }
+        }
     }
 }

@@ -1,5 +1,11 @@
 package src.model;
 
+/**
+ * Enum representing the directions for moving in the maze.
+ */
 public enum Direction {
-    NORTH, SOUTH, EAST, WEST
+    N, // North
+    S, // South
+    E, // East
+    W  // West
 }

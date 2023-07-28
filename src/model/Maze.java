@@ -52,10 +52,10 @@ public class Maze {
         boolean east = xMazeCoord < myMaze.length - 1;
         boolean north = yMazeCoord > 0;
 
-        Door northDoor = north ? myMaze[xMazeCoord][yMazeCoord - 1].getDoor(Direction.SOUTH) : new Door();
+        Door northDoor = north ? myMaze[xMazeCoord][yMazeCoord - 1].getDoor(Direction.S) : new Door();
         Door southDoor = new Door();
         Door eastDoor = new Door();
-        Door westDoor = west ? myMaze[xMazeCoord - 1][yMazeCoord].getDoor(Direction.EAST) : new Door();
+        Door westDoor = west ? myMaze[xMazeCoord - 1][yMazeCoord].getDoor(Direction.E) : new Door();
 
         myMaze[xMazeCoord][yMazeCoord] =
                 new Room(new RoomBlocker(north, south, east, west),
@@ -65,10 +65,10 @@ public class Maze {
     public void movePlayer(final Direction direction) {
         if (canMovePlayer(direction)) {
             switch (direction) {
-                case NORTH -> myY--;
-                case SOUTH -> myY++;
-                case EAST -> myX++;
-                case WEST -> myX--;
+                case N -> myY--;
+                case S-> myY++;
+                case E -> myX++;
+                case W-> myX--;
             }
         }
     }
@@ -117,10 +117,10 @@ public class Maze {
 
     private Direction convertToDirection(int directionIndex) {
         switch (directionIndex) {
-            case 0: return Direction.NORTH;
-            case 1: return Direction.SOUTH;
-            case 2: return Direction.EAST;
-            case 3: return Direction.WEST;
+            case 0: return Direction.N;
+            case 1: return Direction.S;
+            case 2: return Direction.E;
+            case 3: return Direction.W;
             default: throw new IllegalArgumentException("Invalid direction index");
         }
     }

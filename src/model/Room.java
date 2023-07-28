@@ -16,10 +16,10 @@ public class Room {
                 final Door theWestDoor) {
         myBlockedDoors = theBlocker;
         doors = new EnumMap<>(Direction.class);
-        setDoor(Direction.NORTH, theNorthDoor);
-        setDoor(Direction.SOUTH, theSouthDoor);
-        setDoor(Direction.EAST, theEastDoor);
-        setDoor(Direction.WEST, theWestDoor);
+        setDoor(Direction.N, theNorthDoor);
+        setDoor(Direction.S, theSouthDoor);
+        setDoor(Direction.E, theEastDoor);
+        setDoor(Direction.W, theWestDoor);
     }
 
     private void setDoor(Direction direction, Door door) {
@@ -44,10 +44,10 @@ public class Room {
     public String toString() {
         StringBuilder roomString = new StringBuilder();
 
-        roomString.append("\n\t\t\t").append(checkMovement(Direction.NORTH));
-        roomString.append("\n\n").append(checkMovement(Direction.WEST));
-        roomString.append("\t\tPlayer\t\t").append(checkMovement(Direction.EAST));
-        roomString.append("\n\n\t\t\t").append(checkMovement(Direction.SOUTH));
+        roomString.append("\n\t\t\t").append(checkMovement(Direction.N));
+        roomString.append("\n\n").append(checkMovement(Direction.W));
+        roomString.append("\t\tPlayer\t\t").append(checkMovement(Direction.E));
+        roomString.append("\n\n\t\t\t").append(checkMovement(Direction.S));
 
         return roomString.toString();
     }

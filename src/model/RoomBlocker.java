@@ -21,10 +21,10 @@ public class RoomBlocker {
     public RoomBlocker(final boolean theNorth, final boolean theSouth,
                        final boolean theEast, final boolean theWest) {
         blockers = new EnumMap<>(Direction.class);
-        blockers.put(Direction.NORTH, theNorth);
-        blockers.put(Direction.SOUTH, theSouth);
-        blockers.put(Direction.EAST, theEast);
-        blockers.put(Direction.WEST, theWest);
+        blockers.put(Direction.N, theNorth);
+        blockers.put(Direction.S, theSouth);
+        blockers.put(Direction.E, theEast);
+        blockers.put(Direction.W, theWest);
     }
 
     /**

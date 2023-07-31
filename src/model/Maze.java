@@ -1,185 +1,148 @@
 package src.model;
 
+import java.util.Random;
+
 /**
  * The Maze class represents the main game environment where the player navigates.
  */
 public class Maze {
-    private static final int NORTH_DOOR_INDEX = 0;
-    private static final int SOUTH_DOOR_INDEX = 1;
-    private static final int EAST_DOOR_INDEX = 2;
-    private static final int WEST_DOOR_INDEX = 3;
+    private static final int MAZE_SIZE = 5;
 
-    private int myX;
-    private int myY;
-    private final Room[][] myMaze;
-    private final int mazeSize;
+    private int playerX;
+    private int playerY;
+    private int prevPlayerX;
+    private int prevPlayerY;
+    private final Room[][] rooms;
 
-    public Maze(final int size) {
-        mazeSize = size;
-        myX = 0;
-        myY = 0;
-        myMaze = new Room[mazeSize][mazeSize];
-        roomSetup();
+    /**
+     * Constructs a new Maze object with a default size.
+     */
+    public Maze() {
+        playerX = 0;
+        playerY = 0;
+        prevPlayerX = 0;
+        prevPlayerY = 0;
+        rooms = new Room[MAZE_SIZE][MAZE_SIZE];
+        initializeRooms();
     }
 
-    public int getX() {
-        return myX;
-    }
-
-    public int getY() {
-        return myY;
-    }
-
-    public void setX(final int x) {
-        myX = x;
-    }
-
-    public void setY(final int y) {
-        myY = y;
-    }
-
-    private void roomSetup() {
-        for (int xMazeCoord = 0; xMazeCoord < myMaze.length; xMazeCoord++) {
-            for (int yMazeCoord = 0; yMazeCoord < myMaze[xMazeCoord].length; yMazeCoord++) {
-                assignDoorsAndRoom(xMazeCoord, yMazeCoord);
+    /**
+     * Initializes the rooms in the maze to be non-wall rooms.
+     */
+    private void initializeRooms() {
+        for (int x = 0; x < MAZE_SIZE; x++) {
+            for (int y = 0; y < MAZE_SIZE; y++) {
+                rooms[x][y] = new Room();
             }
         }
     }
 
-    private void assignDoorsAndRoom(int xMazeCoord, int yMazeCoord) {
-        boolean west = xMazeCoord - 1 >= 0;
-        boolean south = yMazeCoord < myMaze[xMazeCoord].length - 1;
-        boolean east = xMazeCoord < myMaze.length - 1;
-        boolean north = yMazeCoord > 0;
+    /**
+     * Moves the player in the specified direction, if possible.
+     *
+     * @param direction The direction in which to move the player.
+     * @return True if the player moved, false if the move was not possible.
+     */
+    public boolean movePlayer(Direction direction) {
+        int newX = playerX;
+        int newY = playerY;
 
-        Door northDoor = north ? myMaze[xMazeCoord][yMazeCoord - 1].getDoor(Direction.S) : new Door();
-        Door southDoor = new Door();
-        Door eastDoor = new Door();
-        Door westDoor = west ? myMaze[xMazeCoord - 1][yMazeCoord].getDoor(Direction.E) : new Door();
-
-        myMaze[xMazeCoord][yMazeCoord] =
-                new Room(new RoomBlocker(north, south, east, west),
-                        northDoor, southDoor, eastDoor, westDoor);
-    }
-
-    public void movePlayer(final Direction direction) {
-        if (canMovePlayer(direction)) {
-            switch (direction) {
-                case N -> myY--;
-                case S-> myY++;
-                case E -> myX++;
-                case W-> myX--;
-            }
+        if (direction == Direction.N && playerY > 0) {
+            newY--;
+        } else if (direction == Direction.S && playerY < MAZE_SIZE - 1) {
+            newY++;
+        } else if (direction == Direction.E && playerX < MAZE_SIZE - 1) {
+            newX++;
+        } else if (direction == Direction.W && playerX > 0) {
+            newX--;
+        } else {
+            // Cannot move in the specified direction, display a message
+            System.out.println("You cannot move further in that direction. You are at the edge of the maze.");
+            return false;
         }
-    }
 
-    public boolean canMovePlayer(final Direction direction) {
-        Door localDoor = getCurrentRoom().getDoor(direction);
-        return localDoor != null && !localDoor.isDead();
-    }
-
-    public Room getCurrentRoom() {
-        return myMaze[myX][myY];
-    }
-
-    public boolean isPossible() {
-        for (Room[] rooms : myMaze) {
-            for (Room room : rooms) {
-                room.setVisited(false);
-            }
+        if (!rooms[newX][newY].isWall()) {
+            prevPlayerX = playerX; // Update previous position
+            prevPlayerY = playerY; // Update previous position
+            playerX = newX;
+            playerY = newY;
+            return true;
         }
-        return isPossibleHelper(myX, myY);
-    }
 
-    private boolean isPossibleHelper(final int x, final int y) {
-        if (!myMaze[x][y].getVisited()) {
-            if (x == mazeSize - 1 && y == mazeSize - 1) {
-                return true;
-            }
-            myMaze[x][y].setVisited(true);
-            for (int directionIndex = 0; directionIndex < 4; directionIndex++) {
-                if (isValidMove(x, y, directionIndex)) {
-                    if (isPossibleHelper(newX(x, directionIndex), newY(y, directionIndex))) {
-                        return true;
-                    }
-                }
-            }
-        }
+        // Cannot move to the new position because it's a wall, return false
         return false;
     }
 
-    private boolean isValidMove(int x, int y, int directionIndex) {
-        Direction direction = convertToDirection(directionIndex);
-        Door door = myMaze[x][y].getDoor(direction);
-        return door != null && !door.isDead();
+
+    /**
+     * Checks if the player has reached the exit of the maze.
+     *
+     * @return True if the player has reached the exit, false otherwise.
+     */
+    public boolean isExitReached() {
+        return playerX == MAZE_SIZE - 1 && playerY == MAZE_SIZE - 1;
     }
 
-
-    private Direction convertToDirection(int directionIndex) {
-        switch (directionIndex) {
-            case 0: return Direction.N;
-            case 1: return Direction.S;
-            case 2: return Direction.E;
-            case 3: return Direction.W;
-            default: throw new IllegalArgumentException("Invalid direction index");
-        }
-    }
-
-
-    private int newX(int x, int directionIndex) {
-        return switch (directionIndex) {
-            case EAST_DOOR_INDEX -> x + 1;
-            case WEST_DOOR_INDEX -> x - 1;
-            default -> x;
-        };
-    }
-
-    private int newY(int y, int directionIndex) {
-        return switch (directionIndex) {
-            case NORTH_DOOR_INDEX -> y - 1;
-            case SOUTH_DOOR_INDEX -> y + 1;
-            default -> y;
-        };
-    }
-
-    public boolean goalReached() {
-        return myX == mazeSize - 1 && myY == mazeSize - 1;
+    /**
+     * Gets the previous position of the player.
+     *
+     * @return The previous position of the player as an array [x, y].
+     */
+    public int[] getPrevPlayerPosition() {
+        return new int[]{prevPlayerX, prevPlayerY};
     }
 
     @Override
     public String toString() {
         StringBuilder mazeString = new StringBuilder();
-        for (int i = 0; i < myMaze.length; i++) {
-            mazeString.append("\n");
-            for (int j = 0; j < myMaze[i].length; j++) {
-                mazeString.append(getRoomString(i, j));
+        for (int y = 0; y < MAZE_SIZE; y++) {
+            for (int x = 0; x < MAZE_SIZE; x++) {
+                if (x == playerX && y == playerY) {
+                    mazeString.append("[PLYR]");
+                } else if (x == prevPlayerX && y == prevPlayerY) {
+                    mazeString.append("[PREV]");
+                } else if (x == MAZE_SIZE - 1 && y == MAZE_SIZE - 1) {
+                    mazeString.append("[FNSH]");
+                } else if (rooms[x][y].isWall()) {
+                    mazeString.append("[WALL]");
+                } else {
+                    mazeString.append("[ROOM]");
+                }
             }
+            mazeString.append("\n");
         }
         return mazeString.toString();
     }
 
-    private String getRoomString(int i, int j) {
-        if (i == myY && j == myX) {
-            return "[PLYR]";
-        } else if (i == mazeSize - 1 && j == mazeSize - 1) {
-            return "[FNSH]";
-        } else if (i == 0 && j == 0) {
-            return "[STRT]";
-        } else {
-            return "[ROOM]";
+    /**
+     * Represents a room in the maze.
+     */
+    private static class Room {
+        private boolean wall;
+
+        /**
+         * Constructs a new non-wall room.
+         */
+        public Room() {
+            wall = false;
         }
-    }
 
-    public void moveToEnd() {
-        setX(mazeSize - 1);
-        setY(mazeSize - 1);
-    }
+        /**
+         * Checks if the room is a wall.
+         *
+         * @return True if the room is a wall, false if it is a non-wall room.
+         */
+        public boolean isWall() {
+            return wall;
+        }
 
-    public void undeadAllRooms() {
-        for (Room[] rooms : myMaze) {
-            for (Room room : rooms) {
-                room.undeadRoom();
-            }
+        /**
+         * Sets the room to be a wall or a non-wall.
+         *
+         * @param wall True if the room should be a wall, false if it should be a non-wall room.
+         */
+        public void setWall(boolean wall) {
+            this.wall = wall;
         }
     }
 }

@@ -1,6 +1,8 @@
 package src.model;
 
 import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The Room class represents a room in the game.
@@ -8,35 +10,39 @@ import java.util.EnumMap;
  */
 public class Room {
     private final EnumMap<Direction, Door> doors;
-    private final RoomBlocker myBlockedDoors;
-    private boolean myVisited = false;
+    private final Set<Direction> blockedDoors;
+    private boolean visited = false;
 
-    public Room(final RoomBlocker theBlocker, final Door theNorthDoor,
-                final Door theSouthDoor, final Door theEastDoor,
-                final Door theWestDoor) {
-        myBlockedDoors = theBlocker;
+    public Room() {
         doors = new EnumMap<>(Direction.class);
-        setDoor(Direction.N, theNorthDoor);
-        setDoor(Direction.S, theSouthDoor);
-        setDoor(Direction.E, theEastDoor);
-        setDoor(Direction.W, theWestDoor);
+        blockedDoors = new HashSet<>();
     }
 
-    private void setDoor(Direction direction, Door door) {
-        if (myBlockedDoors.isBlocked(direction)) {
-            doors.put(direction, door);
-        }
+    public void setDoor(Direction direction, Door door) {
+        doors.put(direction, door);
     }
 
-    public void setVisited(final boolean theVisited) {
-        myVisited = theVisited;
+    public void blockDoor(Direction direction) {
+        blockedDoors.add(direction);
     }
 
-    public boolean getVisited() {
-        return myVisited;
+    public void unblockDoor(Direction direction) {
+        blockedDoors.remove(direction);
     }
 
-    public Door getDoor(final Direction direction) {
+    public boolean isBlocked(Direction direction) {
+        return blockedDoors.contains(direction);
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public Door getDoor(Direction direction) {
         return doors.get(direction);
     }
 
@@ -52,20 +58,24 @@ public class Room {
         return roomString.toString();
     }
 
-    private String checkMovement(final Direction direction) {
-        Door door = getDoor(direction);
-        if (door == null) {
+    private String checkMovement(Direction direction) {
+        if (blockedDoors.contains(direction)) {
             return "BLOCKED";
-        } else if (door.getDoorState() == Door.DoorState.DEAD) {
-            return "DEAD DOOR";
         } else {
-            return "MOVE " + direction;
+            Door door = doors.get(direction);
+            if (door == null) {
+                return "NO DOOR";
+            } else if (door.getDoorState() == Door.DoorState.DEAD) {
+                return "DEAD DOOR";
+            } else {
+                return "MOVE " + direction;
+            }
         }
     }
 
     public void undeadRoom() {
         for (Direction direction : Direction.values()) {
-            Door door = getDoor(direction);
+            Door door = doors.get(direction);
             if (door != null && door.getDoorState() == Door.DoorState.DEAD) {
                 door.reset();
             }

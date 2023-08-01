@@ -72,6 +72,12 @@ public class Room {
             }
         }
     }
+    public void closeDoor(Direction direction) {
+        Door door = doors.get(direction);
+        if (door != null && door.getDoorState() == Door.DoorState.UNLOCKED) {
+            door.setDoorState(Door.DoorState.LOCKED);
+        }
+    }
 
     public void undeadRoom() {
         for (Direction direction : Direction.values()) {

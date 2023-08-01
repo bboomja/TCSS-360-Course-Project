@@ -6,6 +6,8 @@ package src.model;
 public class Player {
     private int x;
     private int y;
+    private int prevX;
+    private int prevY;
     private int health;
 
     /**
@@ -14,6 +16,8 @@ public class Player {
     public Player() {
         x = 0;
         y = 0;
+        prevX = 0;
+        prevY = 0;
         health = 100;
     }
 
@@ -32,6 +36,7 @@ public class Player {
      * @param x The new X coordinate.
      */
     public void setX(int x) {
+        this.prevX = this.x;
         this.x = x;
     }
 
@@ -50,7 +55,12 @@ public class Player {
      * @param y The new Y coordinate.
      */
     public void setY(int y) {
+        this.prevY = this.y;
         this.y = y;
+    }
+    public void moveToPrevPosition() {
+        this.x = this.prevX;
+        this.y = this.prevY;
     }
 
     /**

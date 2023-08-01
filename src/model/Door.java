@@ -36,6 +36,9 @@ public class Door {
    public DoorState getDoorState() {
        return myDoorState;
    }
+    public void setDoorState(DoorState doorState) {
+        this.myDoorState = doorState;
+    }
 
     /**
      * Tries to unlock the door with a user answer.
@@ -45,10 +48,12 @@ public class Door {
      * @param theUserAnswer Response that the user gives
      */
    public void attemptUnlock(final String theUserAnswer) {
-       if (myDoorState == DoorState.LOCKED && theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {
-           myDoorState = DoorState.UNLOCKED;
-       } else {
-           myDoorState = DoorState.DEAD;
+       if (myDoorState == DoorState.LOCKED) {
+           if (theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {
+               myDoorState = DoorState.UNLOCKED;
+           } else {
+               myDoorState = DoorState.DEAD;
+           }
        }
    }
 

@@ -1,9 +1,6 @@
 package src.controller;
 
-import src.model.Database;
-import src.model.Direction;
-import src.model.Maze;
-import src.model.Question;
+import src.model.*;
 
 import javax.xml.crypto.Data;
 import java.util.Scanner;
@@ -84,6 +81,7 @@ public class TriviaGame {
                     System.out.println("Correct! The door opens.");
                 } else {
                     System.out.println("Sorry, that's not correct. The door remains closed.");
+                    maze.getPlayer().moveToPrevPosition();
                 }
             }
         }

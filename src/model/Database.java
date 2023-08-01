@@ -39,19 +39,16 @@ public class Database {
             while (rs.next()) {
                 String question = rs.getString("Question");
                 String answer = rs.getString("Answer");
-                QUESTION_BANK.add(new Question(question, answer));
+                String optionA = rs.getString("Choice1");
+                String optionB = rs.getString("Choice2");
+                String optionC = rs.getString("Choice3");
+                String optionD = rs.getString("Choice4");
+                QUESTION_BANK.add(new Question(question, answer, optionA, optionB, optionC, optionD));
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
         }
-    }
-
-    /**
-     * Loads questions from the database table into the QUESTION_BANK list.
-     */
-    public static void loadQuestionsFromDatabase() {
-        QUESTION_BANK.add(new Question("Who was the first president of the United States?", "George Washington."));
     }
 
     /**

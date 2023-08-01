@@ -14,15 +14,41 @@ public class Question {
      */
     private final String myAnswer;
 
+    private String optionA;
+    private String optionB;
+    private String optionC;
+    private String optionD;
+
     /**
      * Creates a new Question.
      *
      * @param theQuestion The question
      * @param theAnswer The answer to the question
      */
-    public Question(final String theQuestion, final String theAnswer) {
+    public Question(final String theQuestion, final String theAnswer, final String optionA,
+                    final String optionB, final String optionC, final String optionD) {
         myQuestion = theQuestion;
         myAnswer = theAnswer;
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.optionD = optionD;
+    }
+
+    public String getOptionA() {
+        return optionA;
+    }
+
+    public String getOptionB() {
+        return optionB;
+    }
+
+    public String getOptionC() {
+        return optionC;
+    }
+
+    public String getOptionD() {
+        return optionD;
     }
 
     /**

@@ -1,15 +1,18 @@
 package src.controller;
 
+import src.model.Database;
 import src.model.Direction;
 import src.model.Maze;
+import src.model.Question;
 
+import javax.xml.crypto.Data;
 import java.util.Scanner;
 
 public class TriviaGame {
     public static void main(String[] args) {
         System.out.println("Current Directory: " + System.getProperty("user.dir"));
-        // Connect to the database and load questions
-        // ...
+
+        Database.connectToDatabase();
 
         // Create the maze
         final int mazeSize = 5; // You can change this to any desired maze size
@@ -47,8 +50,41 @@ public class TriviaGame {
 
             // Move the player and handle door interactions
             if (maze.movePlayer(direction)) {
-                // Handle door interactions here if needed
-                // ...
+                Question question = Database.getRandomQuestion();
+                System.out.println("Here's a question! If you answer correctly, the door will open.");
+                System.out.println("Question: " + question.getQuestion());
+                System.out.println("A: " + question.getOptionA());
+                System.out.println("B: " + question.getOptionB());
+                System.out.println("C: " + question.getOptionC());
+                System.out.println("D: " + question.getOptionD());
+
+                System.out.print("Your answer (A, B, C, D): ");
+                String userAnswers = scanner.nextLine().toUpperCase();
+
+                String userAnswer;
+                switch (userAnswers) {
+                    case "A":
+                        userAnswer = question.getOptionA();
+                        break;
+                    case "B":
+                        userAnswer = question.getOptionB();
+                        break;
+                    case "C":
+                        userAnswer = question.getOptionC();
+                        break;
+                    case "D":
+                        userAnswer = question.getOptionD();
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter A, B, C, or D.");
+                        continue;
+                }
+
+                if (userAnswer.equalsIgnoreCase(question.getAnswer())) {
+                    System.out.println("Correct! The door opens.");
+                } else {
+                    System.out.println("Sorry, that's not correct. The door remains closed.");
+                }
             }
         }
 

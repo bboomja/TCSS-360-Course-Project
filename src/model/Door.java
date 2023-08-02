@@ -5,7 +5,10 @@ package src.model;
  * It can opened by havinf the player answer a question.
  */
 public class Door {
-   public enum DoorState {
+    private DoorState doorState;
+
+
+    public enum DoorState {
        LOCKED,
        UNLOCKED,
        DEAD
@@ -47,15 +50,13 @@ public class Door {
      *
      * @param theUserAnswer Response that the user gives
      */
-   public void attemptUnlock(final String theUserAnswer) {
-       if (myDoorState == DoorState.LOCKED) {
-           if (theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {
-               myDoorState = DoorState.UNLOCKED;
-           } else {
-               myDoorState = DoorState.DEAD;
-           }
-       }
-   }
+    public void attemptUnlock(final String theUserAnswer) {
+        if (myDoorState == DoorState.LOCKED && theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {
+            myDoorState = DoorState.UNLOCKED;
+        } else {
+            myDoorState = DoorState.DEAD;
+        }
+    }
 
     /**
      * Returns the question.
@@ -81,15 +82,21 @@ public class Door {
      * @return true if the door is DEAD, false otherwise.
      */
     public boolean isDead() {
-        return myDoorState == DoorState.DEAD;
+        return myDoorState.equals(DoorState.DEAD);
     }
 
     /**
      * Resets a dead door to the locked state.
      */
-   public void reset() {
-       if (myDoorState == DoorState.DEAD) {
-           myDoorState = DoorState.LOCKED;
-       }
-   }
+    public void reset() {
+        myDoorState = DoorState.LOCKED;
+    }
+
+    public void lock() {
+        this.doorState = DoorState.LOCKED;
+    }
+
+    public void unlock() {
+        this.doorState = DoorState.UNLOCKED;
+    }
 }

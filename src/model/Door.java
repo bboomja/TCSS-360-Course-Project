@@ -5,7 +5,10 @@ package src.model;
  * It can opened by havinf the player answer a question.
  */
 public class Door {
-   public enum DoorState {
+    private DoorState doorState;
+
+
+    public enum DoorState {
        LOCKED,
        UNLOCKED,
        DEAD
@@ -92,4 +95,12 @@ public class Door {
            myDoorState = DoorState.LOCKED;
        }
    }
+
+    public void lock() {
+        this.doorState = DoorState.LOCKED;
+    }
+
+    public void unlock() {
+        this.doorState = DoorState.UNLOCKED;
+    }
 }

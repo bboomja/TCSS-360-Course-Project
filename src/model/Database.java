@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * This class handles connection to the QuestionAnswer table of
  * the Table database and loading the contents into ArrayList that
- * can be acessed via getters.
+ * can be accessed via getters.
  */
 public class Database {
     /**
@@ -38,7 +38,7 @@ public class Database {
 
             while (rs.next()) {
                 String question = rs.getString("Question");
-                String answer = rs.getString("Answer");
+                String answer = rs.getString(  "Answer");
                 String optionA = rs.getString("Choice1");
                 String optionB = rs.getString("Choice2");
                 String optionC = rs.getString("Choice3");

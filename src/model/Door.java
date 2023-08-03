@@ -2,16 +2,20 @@ package src.model;
 
 /**
  * Door is obstacle for the player.
- * It can opened by havinf the player answer a question.
+ * It can Opened  by having the player answer a question.
  */
 public class Door {
     private DoorState doorState;
 
+    /**
+     * The Question and answer of the door.
+     */
 
     public enum DoorState {
        LOCKED,
        UNLOCKED,
-       DEAD
+       DEAD,
+        WALL
    }
 
     /**
@@ -50,11 +54,20 @@ public class Door {
      *
      * @param theUserAnswer Response that the user gives
      */
+
+    private int failedAttempts = 0;
+    private static final int MAX_FAILED_ATTEMPTS = 3;
+
     public void attemptUnlock(final String theUserAnswer) {
         if (myDoorState == DoorState.LOCKED && theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {
             myDoorState = DoorState.UNLOCKED;
         } else {
-            myDoorState = DoorState.DEAD;
+            failedAttempts++;
+            if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
+                myDoorState = DoorState.WALL;
+            } else {
+                myDoorState = DoorState.DEAD;
+            }
         }
     }
 
@@ -92,10 +105,16 @@ public class Door {
         myDoorState = DoorState.LOCKED;
     }
 
+    /**
+     * Locks the door.
+     */
     public void lock() {
         this.doorState = DoorState.LOCKED;
     }
 
+    /**
+     * Unlocks the door.
+     */
     public void unlock() {
         this.doorState = DoorState.UNLOCKED;
     }

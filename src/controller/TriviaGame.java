@@ -1,35 +1,47 @@
 package src.controller;
 
 import src.model.*;
-
-import javax.xml.crypto.Data;
 import java.util.Scanner;
 
+/**
+ * The TriviaGame class is the main class for the game.
+ * It contains the main method for the game.
+ * It also contains the maze and the number of incorrect answers.
+ *
+ * @Shuaib Ali
+ * @Hyun Jeon
+ * @Yaxye Muxamed
+ */
+
 public class TriviaGame {
+    private static final int mazeSize = 5; // The size of the maze
+    private static Maze maze; // The maze
+    private static int incorrectAnswerCount = 0;// The number of incorrect answers
+
+    /**
+     * The main method for the game.
+     *
+     * @param args The command line arguments.
+     */
+
     public static void main(String[] args) {
         System.out.println("Current Directory: " + System.getProperty("user.dir"));
 
         Database.connectToDatabase();
 
-        // Create the maze
-        final int mazeSize = 5; // You can change this to any desired maze size
-        Maze maze = new Maze();
+        maze = new Maze();
 
-        // Create a Scanner to get user input
         Scanner scanner = new Scanner(System.in);
 
-        // Main game loop
         while (true) {
-            // Print the current state of the maze
+
             System.out.println(maze.toString());
 
-            // Check if the player has reached the goal
             if (maze.isExitReached()) {
                 System.out.println("Congratulations! You reached the finish!");
                 break;
             }
 
-            // Get the user input for movement
             Direction direction = null;
             boolean validInput = false;
 
@@ -44,8 +56,7 @@ public class TriviaGame {
                     System.out.println("Invalid direction. Please enter N, S, E, or W.");
                 }
             }
-
-            // Move the player and handle door interactions
+            // Compare this snippet from src/model/Maze.java:
             if (maze.movePlayer(direction)) {
                 Question question = Database.getRandomQuestion();
                 System.out.println("Here's a question! If you answer correctly, the door will open.");
@@ -78,10 +89,28 @@ public class TriviaGame {
                 }
 
                 if (userAnswer.equalsIgnoreCase(question.getAnswer())) {
-                    System.out.println("Correct! The door opens.");
+                    System.out.println("Correct! Door opens to " + direction + " Direction.");
                 } else {
-                    System.out.println("Sorry, that's not correct. The door remains closed.");
+                    System.out.println("Incorrect. Door remains closed.");
                     maze.getPlayer().moveToPrevPosition();
+                    incorrectAnswerCount++;
+
+                    if (incorrectAnswerCount >= 3) {
+                        System.out.println("GAME IS OVER! THE PLAYER IS TRAPPED.");
+                        maze.lockAllDoors();
+
+                        System.out.println("Would you like to restart the game? (Y/N)");
+                        String input = scanner.nextLine().toUpperCase();
+
+                        if (input.equals("Y")) {
+                            System.out.println("Restarting the game...");
+                            resetGame();
+                            continue;  // Starts the next iteration of the game loop, effectively restarting the game
+                        } else {
+                            System.out.println("Ending the game...");
+                            break;  // Exits the game loop, effectively ending the game
+                        }
+                    }
                 }
             }
         }
@@ -89,4 +118,14 @@ public class TriviaGame {
         // Close the scanner
         scanner.close();
     }
+
+    /**
+     * Resets the game to its initial state.
+     */
+
+    private static void resetGame() {
+        maze = new Maze();
+        incorrectAnswerCount = 0;
+    }
 }
+

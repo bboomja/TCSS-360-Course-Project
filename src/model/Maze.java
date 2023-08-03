@@ -9,7 +9,7 @@ import java.util.Random;
 public class Maze {
     private static final int MAZE_SIZE = 5;
 
-    private Player player;
+    private final Player player;
     private final Room[][] rooms;
     private int incorrectAnswerCount = 0;
 

@@ -89,9 +89,9 @@ public class TriviaGame {
                 }
 
                 if (userAnswer.equalsIgnoreCase(question.getAnswer())) {
-                    System.out.println("Correct! The door opens.");
+                    System.out.println("Correct! Door opens to " + direction + " Direction.");
                 } else {
-                    System.out.println("Sorry, that's not correct. The door remains closed.");
+                    System.out.println("Incorrect. Door remains closed.");
                     maze.getPlayer().moveToPrevPosition();
                     incorrectAnswerCount++;
 

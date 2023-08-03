@@ -5,7 +5,8 @@ package src.model;
  */
 public enum Direction {
     N, // North or Up
-    S, // South or Down
-    E, // East  // Right
+    S,// South or Down
+    E,// East  // Right
     W  // West  // Left
+
 }

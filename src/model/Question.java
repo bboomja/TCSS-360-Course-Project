@@ -15,10 +15,10 @@ public class Question {
      */
     private final String myAnswer;
 
-    private String optionA;
-    private String optionB;
-    private String optionC;
-    private String optionD;
+    private String myOptionA;
+    private String myOptionB;
+    private String myOptionC;
+    private String myOptionD;
 
     /**
      * Creates a new Question.
@@ -26,30 +26,30 @@ public class Question {
      * @param theQuestion The question
      * @param theAnswer The answer to the question
      */
-    public Question(final String theQuestion, final String theAnswer, final String optionA,
-                    final String optionB, final String optionC, final String optionD) {
+    public Question(final String theQuestion, final String theAnswer, final String theOptionA,
+                    final String theOptionB, final String theOptionC, final String theOptionD) {
         myQuestion = theQuestion;
         myAnswer = theAnswer;
-        this.optionA = optionA;
-        this.optionB = optionB;
-        this.optionC = optionC;
-        this.optionD = optionD;
+        this.myOptionA = theOptionA;
+        this.myOptionB = theOptionB;
+        this.myOptionC = theOptionC;
+        this.myOptionD = theOptionD;
     }
 
     public String getOptionA() {
-        return optionA;
+        return myOptionA;
     }
 
     public String getOptionB() {
-        return optionB;
+        return myOptionB;
     }
 
     public String getOptionC() {
-        return optionC;
+        return myOptionC;
     }
 
     public String getOptionD() {
-        return optionD;
+        return myOptionD;
     }
 
     /**

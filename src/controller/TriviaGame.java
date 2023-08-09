@@ -1,6 +1,8 @@
 package src.controller;
 
 import src.model.*;
+
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -14,8 +16,11 @@ import java.util.Scanner;
  */
 
 public class TriviaGame {
-    private static final int mazeSize = 5; // The size of the maze
+    private static final String SAVE_ONE = "save1.txt";
+    private static final String SAVE_TWO = "save2.txt";
+    private static final String SAVE_THREE = "save3.txt";
     private static Maze maze; // The maze
+    private static Door door;
     private static int incorrectAnswerCount = 0;// The number of incorrect answers
 
     /**
@@ -25,8 +30,6 @@ public class TriviaGame {
      */
 
     public static void main(String[] args) {
-        System.out.println("Current Directory: " + System.getProperty("user.dir"));
-
         Database.connectToDatabase();
 
         maze = new Maze();
@@ -92,10 +95,11 @@ public class TriviaGame {
                     System.out.println("Correct! Door opens to " + direction + " Direction.");
                 } else {
                     System.out.println("Incorrect. Door remains closed.");
+                    System.out.println("Failed attempts: " + Door.getFailedAttempts() + "/" + Door.MAX_FAILED_ATTEMPTS);
                     maze.getPlayer().moveToPrevPosition();
                     incorrectAnswerCount++;
 
-                    if (incorrectAnswerCount >= 3) {
+                    if (incorrectAnswerCount == 3) {
                         System.out.println("GAME IS OVER! THE PLAYER IS TRAPPED.");
                         maze.lockAllDoors();
 
@@ -114,6 +118,26 @@ public class TriviaGame {
                 }
             }
         }
+//        System.out.println("Choose an action:");
+//        System.out.println("1. Save Game");
+//        System.out.println("2. Load Game");
+//        System.out.println("3. Exit");
+//        String userAction = scanner.nextLine();
+//
+//        switch (userAction) {
+//            case "1":
+//                saveGame();
+//                break;
+//            case "2":
+//                loadGame();
+//                break;
+//            case "3":
+//                System.out.println("Ending the game..");
+//                return;
+//            default:
+//                System.out.println("Invalid choice.");
+//                break;
+//        }
 
         // Close the scanner
         scanner.close();
@@ -127,5 +151,71 @@ public class TriviaGame {
         maze = new Maze();
         incorrectAnswerCount = 0;
     }
+
+    private static void saveGame() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a save file (1, 2, 3): ");
+        String userOption = scanner.nextLine();
+
+        String saveFileName;
+        switch (userOption) {
+            case "1":
+                saveFileName = SAVE_ONE;
+                break;
+            case "2":
+                saveFileName = SAVE_TWO;
+                break;
+            case "3":
+                saveFileName = SAVE_THREE;
+                break;
+            default:
+                System.out.println("Invalid save file option.");
+                return;
+        }
+
+        // 현재 작업 디렉토리에서 파일 경로 찾기
+        String currentDir = System.getProperty("user.dir");
+        String filePath = currentDir + File.separator + saveFileName;
+
+        try (FileOutputStream fileStream = new FileOutputStream(filePath);
+             ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
+            objectStream.writeObject(maze);
+            System.out.println("Game saved successfully!");
+        } catch (IOException e) {
+            System.out.println("Error saving the game.");
+        }
+    }
+
+
+    private static void loadGame() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a save file to load (1, 2, 3): ");
+        String userLoadOption = scanner.nextLine();
+
+        String loadFileName;
+        switch (userLoadOption) {
+            case "1":
+                loadFileName = SAVE_ONE;
+                break;
+            case "2":
+                loadFileName = SAVE_TWO;
+                break;
+            case "3":
+                loadFileName = SAVE_THREE;
+                break;
+            default:
+                System.out.println("Invalid load file option.");
+                return;
+        }
+
+        try (FileInputStream fileStream = new FileInputStream(loadFileName);
+             ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
+            maze = (Maze) objectStream.readObject();
+            System.out.println("Game loaded successfully!");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading the game.");
+        }
+    }
+
 }
 

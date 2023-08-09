@@ -5,7 +5,9 @@ package src.model;
  * It can Opened  by having the player answer a question.
  */
 public class Door {
+    public static final int MAX_FAILED_ATTEMPTS = 3;
     private DoorState doorState;
+    private static int failedAttempts = 0;
 
     /**
      * The Question and answer of the door.
@@ -55,8 +57,12 @@ public class Door {
      * @param theUserAnswer Response that the user gives
      */
 
-    private int failedAttempts = 0;
-    private static final int MAX_FAILED_ATTEMPTS = 3;
+
+
+
+    public static int getFailedAttempts() {
+        return failedAttempts;
+    }
 
     public void attemptUnlock(final String theUserAnswer) {
         if (myDoorState == DoorState.LOCKED && theUserAnswer.equalsIgnoreCase(myQuestion.getAnswer())) {

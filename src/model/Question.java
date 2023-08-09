@@ -15,10 +15,10 @@ public class Question {
      */
     private final String myAnswer;
 
-    private String myOptionA;
-    private String myOptionB;
-    private String myOptionC;
-    private String myOptionD;
+    final private String myOptionA;
+    final private String myOptionB;
+    final private String myOptionC;
+    final private String myOptionD;
 
     /**
      * Creates a new Question.
@@ -70,14 +70,4 @@ public class Question {
         return myAnswer;
     }
 
-    /**
-     * Checks if the provided answer is correct.
-     *
-     * @param playerAnswer The player's answer
-     * @return true if the player's answer matches the correct answer, false otherwise
-     */
-    public boolean isAnswerCorrect(String playerAnswer) {
-        // Assuming case-insensitive answer checking
-        return playerAnswer.equalsIgnoreCase(myAnswer);
-    }
 }

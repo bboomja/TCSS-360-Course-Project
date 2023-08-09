@@ -157,21 +157,8 @@ public class Room {
     }
 
     /**
-     * Unlocks the door in the given direction if it is locked.
-     * @param direction
-     */
-
-    public void closeDoor(Direction direction) {
-        Door door = doors.get(direction);
-        if (door != null && door.getDoorState() == Door.DoorState.UNLOCKED) {
-            door.lock();
-        }
-    }
-
-    /**
      * Unlocks all doors in the room.
      */
-
     public void undeadRoom() {
         doors.values().stream()
                 .filter(door -> door != null && door.getDoorState() == Door.DoorState.DEAD)

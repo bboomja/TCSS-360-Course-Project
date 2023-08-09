@@ -10,17 +10,15 @@ import java.util.Scanner;
  * It contains the main method for the game.
  * It also contains the maze and the number of incorrect answers.
  *
- * @Shuaib Ali
- * @Hyun Jeon
- * @Yaxye Muxamed
+ * @author Shuaib Ali
+ * @author Hyun Jeon
+ * @author Yaxye Muxamed
  */
-
 public class TriviaGame {
     private static final String SAVE_ONE = "save1.txt";
     private static final String SAVE_TWO = "save2.txt";
     private static final String SAVE_THREE = "save3.txt";
-    private static Maze maze; // The maze
-    private static Door door;
+    private static Maze myMaze; // The maze
     private static int incorrectAnswerCount = 0;// The number of incorrect answers
 
     /**
@@ -28,130 +26,184 @@ public class TriviaGame {
      *
      * @param args The command line arguments.
      */
-
     public static void main(String[] args) {
-        Database.connectToDatabase();
+        introGame();
+    }
 
-        maze = new Maze();
+    private static void introGame() {
+        System.out.println("Welcome to our Trivia Maze!");
+        System.out.println("Our game theme is U.S. History.");
+        System.out.println("Your goal is to reach the finish by answering questions correctly.");
+        System.out.println("If you answer 3 questions incorrectly, the game ends.");
+        System.out.print("Are you ready to play (Y/N): ");
 
         Scanner scanner = new Scanner(System.in);
+        String playChoice = scanner.nextLine().toUpperCase();
 
+        System.out.println();
+
+        if (playChoice.equals("Y")) {
+            Database.connectToDatabase();
+            myMaze = new Maze();
+            runGameLoop(scanner);
+        } else {
+            System.out.println("Maybe next time! Goodbye.");
+        }
+
+        scanner.close();
+    }
+
+    /**
+     * Runs the main game loop.
+     *
+     * @param theScanner The scanner for user input.
+     */
+    private static void runGameLoop(Scanner theScanner) {
         while (true) {
+            System.out.println(myMaze.toString());
 
-            System.out.println(maze.toString());
-
-            if (maze.isExitReached()) {
+            if (myMaze.isExitReached()) {
                 System.out.println("Congratulations! You reached the finish!");
                 break;
+            }
+
+            System.out.print("Enter a direction (N, S, E, W) or '1' to save, '2' to load: ");
+            String input = theScanner.nextLine().toUpperCase();
+            System.out.println();
+
+            if (input.equals("1")) {
+                saveGame();
+                continue;
+            } else if (input.equals("2")) {
+                loadGame();
+                continue;
             }
 
             Direction direction = null;
             boolean validInput = false;
 
             while (!validInput) {
-                System.out.print("Enter a direction (N, S, E, W): ");
-                String input = scanner.nextLine().toUpperCase();
-
                 try {
                     direction = Direction.valueOf(input);
                     validInput = true;
                 } catch (IllegalArgumentException e) {
-                    System.out.println("Invalid direction. Please enter N, S, E, or W.");
+                    System.out.println("Invalid direction. Please enter N, S, E, W, or '1' to save, '2' to load.");
                 }
             }
-            // Compare this snippet from src/model/Maze.java:
-            if (maze.movePlayer(direction)) {
+
+            if (myMaze.movePlayer(direction)) {
                 Question question = Database.getRandomQuestion();
-                System.out.println("Here's a question! If you answer correctly, the door will open.");
-                System.out.println("Question: " + question.getQuestion());
-                System.out.println("A: " + question.getOptionA());
-                System.out.println("B: " + question.getOptionB());
-                System.out.println("C: " + question.getOptionC());
-                System.out.println("D: " + question.getOptionD());
-
-                System.out.print("Your answer (A, B, C, D): ");
-                String userAnswers = scanner.nextLine().toUpperCase();
-
-                String userAnswer;
-                switch (userAnswers) {
-                    case "A":
-                        userAnswer = question.getOptionA();
-                        break;
-                    case "B":
-                        userAnswer = question.getOptionB();
-                        break;
-                    case "C":
-                        userAnswer = question.getOptionC();
-                        break;
-                    case "D":
-                        userAnswer = question.getOptionD();
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please enter A, B, C, or D.");
-                        continue;
-                }
-
-                if (userAnswer.equalsIgnoreCase(question.getAnswer())) {
-                    System.out.println("Correct! Door opens to " + direction + " Direction.");
-                } else {
-                    System.out.println("Incorrect. Door remains closed.");
-                    System.out.println("Failed attempts: " + Door.getFailedAttempts() + "/" + Door.MAX_FAILED_ATTEMPTS);
-                    maze.getPlayer().moveToPrevPosition();
-                    incorrectAnswerCount++;
-
-                    if (incorrectAnswerCount == 3) {
-                        System.out.println("GAME IS OVER! THE PLAYER IS TRAPPED.");
-                        maze.lockAllDoors();
-
-                        System.out.println("Would you like to restart the game? (Y/N)");
-                        String input = scanner.nextLine().toUpperCase();
-
-                        if (input.equals("Y")) {
-                            System.out.println("Restarting the game...");
-                            resetGame();
-                            continue;  // Starts the next iteration of the game loop, effectively restarting the game
-                        } else {
-                            System.out.println("Ending the game...");
-                            break;  // Exits the game loop, effectively ending the game
-                        }
-                    }
-                }
+                askQuestionAndProcessAnswer(question, theScanner, direction);
+            } else {
+                System.out.println("Invalid move. Try again.");
             }
         }
-//        System.out.println("Choose an action:");
-//        System.out.println("1. Save Game");
-//        System.out.println("2. Load Game");
-//        System.out.println("3. Exit");
-//        String userAction = scanner.nextLine();
-//
-//        switch (userAction) {
-//            case "1":
-//                saveGame();
-//                break;
-//            case "2":
-//                loadGame();
-//                break;
-//            case "3":
-//                System.out.println("Ending the game..");
-//                return;
-//            default:
-//                System.out.println("Invalid choice.");
-//                break;
-//        }
+    }
 
-        // Close the scanner
-        scanner.close();
+    /**
+     * Presents a question to the player, processes the answer, and updates
+     * game state accordingly.
+     *
+     * @param theQuestion The question to be asked
+     * @param theScanner The scanner for user input
+     * @param theDirection The direction in which the door is located
+     */
+    private static void askQuestionAndProcessAnswer(Question theQuestion,
+                                                    Scanner theScanner, Direction theDirection) {
+        System.out.println("Here's a question! If you answer correctly, the door will open.");
+        System.out.println("Question: " + theQuestion.getQuestion());
+        System.out.println("A: " + theQuestion.getOptionA());
+        System.out.println("B: " + theQuestion.getOptionB());
+        System.out.println("C: " + theQuestion.getOptionC());
+        System.out.println("D: " + theQuestion.getOptionD());
+
+        System.out.print("Your answer (A, B, C, D): ");
+        String userAnswers = theScanner.nextLine().toUpperCase();
+
+        String userAnswer;
+        switch (userAnswers) {
+            case "A":
+                userAnswer = theQuestion.getOptionA();
+                break;
+            case "B":
+                userAnswer = theQuestion.getOptionB();
+                break;
+            case "C":
+                userAnswer = theQuestion.getOptionC();
+                break;
+            case "D":
+                userAnswer = theQuestion.getOptionD();
+                break;
+            default:
+                System.out.println("Invalid choice. Please enter A, B, C, or D.");
+                return; // You might want to return here to avoid further processing
+        }
+
+        if (userAnswer.equalsIgnoreCase(theQuestion.getAnswer())) {
+            System.out.println("Correct! Door opens to " + theDirection + " Direction.");
+        } else {
+            System.out.println("Incorrect. Door remains closed.");
+            System.out.println("Failed attempts: " + (incorrectAnswerCount + 1) + "/" + Door.MAX_FAILED_ATTEMPTS);
+            myMaze.getPlayer().moveToPrevPosition();
+            incorrectAnswerCount++;
+
+            if (incorrectAnswerCount == 3) {
+                handleGameEnd(theScanner);
+            }
+        }
+    }
+
+    /**
+     * Handles the end of the game, providing options to restart or end.
+     *
+     * @param theScanner The scanner for user input
+     */
+    private static void handleGameEnd(Scanner theScanner) {
+        System.out.println("GAME IS OVER! THE PLAYER IS TRAPPED.");
+        myMaze.lockAllDoors();
+
+        System.out.print("Would you like to restart the game? (Y/N): ");
+        String input = theScanner.nextLine().toUpperCase();
+
+        if (input.equals("Y")) {
+            restartGame();
+        } else {
+            endGame(theScanner);
+        }
+    }
+
+    /**
+     * Restarts the game by resetting the game state and reconnecting to the database.
+     */
+    private static void restartGame() {
+        System.out.println("Restarting the game...");
+        resetGame();
+
+        Database.connectToDatabase();
+    }
+
+    /**
+     * Ends the game and exits the applications.
+     *
+     * @param theScanner The scanner for user input.
+     */
+    private static void endGame(Scanner theScanner) {
+        System.out.println("Ending the game...");
+        theScanner.close();
+        System.exit(0);
     }
 
     /**
      * Resets the game to its initial state.
      */
-
     private static void resetGame() {
-        maze = new Maze();
+        myMaze = new Maze();
         incorrectAnswerCount = 0;
     }
 
+    /**
+     * Saves the current game state to a specified save file.
+     */
     private static void saveGame() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose a save file (1, 2, 3): ");
@@ -179,7 +231,7 @@ public class TriviaGame {
 
         try (FileOutputStream fileStream = new FileOutputStream(filePath);
              ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
-            objectStream.writeObject(maze);
+            objectStream.writeObject(myMaze);
             System.out.println("Game saved successfully!");
         } catch (IOException e) {
             System.out.println("Error saving the game.");
@@ -187,6 +239,9 @@ public class TriviaGame {
     }
 
 
+    /**
+     * Loads a saved game state from a specified save file.
+     */
     private static void loadGame() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose a save file to load (1, 2, 3): ");
@@ -210,12 +265,11 @@ public class TriviaGame {
 
         try (FileInputStream fileStream = new FileInputStream(loadFileName);
              ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
-            maze = (Maze) objectStream.readObject();
+            myMaze = (Maze) objectStream.readObject();
             System.out.println("Game loaded successfully!");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error loading the game.");
         }
     }
-
 }
 

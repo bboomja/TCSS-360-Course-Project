@@ -20,6 +20,8 @@ public class Database {
      * List holding the questions.
      */
     private static final List<Question> QUESTION_BANK = new ArrayList<>();
+    private static final List<Question> USED_QUESTIONS = new ArrayList<>();
+
 
     /**
      * Establishes a connection to the database and loads table values into ArrayLists.
@@ -56,10 +58,31 @@ public class Database {
      *
      * @return a random Question object from QUESTION_BANK
      */
-    public static Question getRandomQuestion() {
+ /*   public static Question getRandomQuestion() {
         Random rand = new Random();
         int index = rand.nextInt(QUESTION_BANK.size());
         return QUESTION_BANK.get(index);
+    }*/
+    public static Question getRandomQuestion() {
+        if (QUESTION_BANK.isEmpty()) {
+            // Handle the case where no questions are available
+            return null;
+        }
+
+        // Find an unused question
+        Random rand = new Random();
+        int index;
+        do {
+            index = rand.nextInt(QUESTION_BANK.size());
+        } while (USED_QUESTIONS.contains(QUESTION_BANK.get(index)));
+
+        Question selectedQuestion = QUESTION_BANK.get(index);
+        USED_QUESTIONS.add(selectedQuestion); // Mark the question as used
+        return selectedQuestion;
+    }
+
+    public static void resetUsedQuestions() {
+        USED_QUESTIONS.clear();
     }
 
 }

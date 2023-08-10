@@ -3,7 +3,9 @@ package src.controller;
 import src.model.*;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * The TriviaGame class is the main class for the game.
@@ -20,6 +22,8 @@ public class TriviaGame {
     private static final String SAVE_THREE = "save3.txt";
     private static Maze myMaze; // The maze
     private static int incorrectAnswerCount = 0;// The number of incorrect answers
+    private static Set<Question> askedQuestions = new HashSet<>();
+
 
     /**
      * The main method for the game.
@@ -178,9 +182,10 @@ public class TriviaGame {
     private static void restartGame() {
         System.out.println("Restarting the game...");
         resetGame();
-
+        Database.resetUsedQuestions(); // Reset used questions
         Database.connectToDatabase();
     }
+
 
     /**
      * Ends the game and exits the applications.
@@ -267,9 +272,11 @@ public class TriviaGame {
              ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
             myMaze = (Maze) objectStream.readObject();
             System.out.println("Game loaded successfully!");
+            Database.resetUsedQuestions(); // Reset used questions
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error loading the game.");
         }
     }
+
 }
 

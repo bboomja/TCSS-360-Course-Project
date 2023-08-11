@@ -1,13 +1,14 @@
 package src.model;
 
-import java.util.Random;
+import java.util.*;
+import java.io.Serializable;
 
 /**
  * The Maze class represents the main game environment where the player navigates.
  */
 
 public class Maze {
-    private static final int MAZE_SIZE = 5;
+    private static final int MAZE_SIZE = 4;
 
     private final Player player;
     private final Room[][] rooms;
@@ -46,33 +47,45 @@ public class Maze {
      * @param direction The direction in which to move the player.
      * @return True if the player successfully moved, false otherwise.
      */
-
     public boolean movePlayer(Direction direction) {
+        // Get the current coordinates of the player
         int newX = player.getX();
         int newY = player.getY();
 
+        // Check if the desired direction is valid and within the maze bounds
         if (direction == Direction.N && newY > 0) {
+            // If moving North is valid, update the new Y coordinate accordingly
             newY--;
         } else if (direction == Direction.S && newY < MAZE_SIZE - 1) {
+            // If moving South is valid, update the new Y coordinate accordingly
             newY++;
         } else if (direction == Direction.E && newX < MAZE_SIZE - 1) {
+            // If moving East is valid, update the new X coordinate accordingly
             newX++;
         } else if (direction == Direction.W && newX > 0) {
+            // If moving West is valid, update the new X coordinate accordingly
             newX--;
         } else {
-            System.out.println("You cannot move further in that direction. You are at the edge of the maze.");
+            // If the desired direction is invalid or beyond the maze bounds,
+            // print a message and return false (indicating the move is not successful)
+            //System.out.println("You cannot move further in that direction. You are at the edge of the maze.");
             return false;
         }
 
+        // Check if the destination cell is not a wall (i.e., it's a valid move)
         if (!rooms[newX][newY].isWall()) {
+            // If the destination cell is not a wall, update the player's position
             player.setX(newX);
             player.setY(newY);
-            return true;
+            return true; // Return true to indicate that the move is successful
         } else {
-            System.out.println("You cannot move further in that direction. You hit a wall.");
+            // If the destination cell is a wall, print a message and return false
+            // (indicating that the move is not successful)
+            //System.out.println("You cannot move further in that direction. You hit a wall.");
             return false;
         }
     }
+
 
     /**
      * Locks all doors in the maze except for the one the player entered from.
@@ -161,7 +174,7 @@ public class Maze {
     }
 
     public Player getPlayer() {
-          return player;
+        return player;
     }
 
     /**
@@ -196,3 +209,4 @@ public class Maze {
         }
     }
 }
+

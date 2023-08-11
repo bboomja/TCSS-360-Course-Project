@@ -11,10 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TriviaMazeGUI extends JFrame {
-    private TriviaGame triviaGame;
-    private JTextArea mazeTextArea;
-    private JTextField directionTextField;
-    private JButton moveButton;
+    private final TriviaGame triviaGame;
+    private final JTextArea mazeTextArea;
+    private final JTextField directionTextField;
+    private final JButton moveButton;
 
     public TriviaMazeGUI() {
         triviaGame = new TriviaGame();
@@ -57,7 +57,7 @@ public class TriviaMazeGUI extends JFrame {
         String input = directionTextField.getText().trim().toUpperCase();
         if (!input.isEmpty()) {
             Direction direction = Direction.valueOf(input);
-            String result = triviaGame.movePlayer(direction);
+            String result = triviaGame.(direction);
             mazeTextArea.setText(getMazeLayout() + "\n" + result);
             directionTextField.setText("");
 

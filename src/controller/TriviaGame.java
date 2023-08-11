@@ -22,7 +22,7 @@ public class TriviaGame {
     private static final String SAVE_THREE = "save3.txt";
     private static Maze myMaze; // The maze
     private static int incorrectAnswerCount = 0;// The number of incorrect answers
-    private static Set<Question> askedQuestions = new HashSet<>();
+    private static final Set<Question> askedQuestions = new HashSet<>();
 
 
     /**
@@ -50,12 +50,14 @@ public class TriviaGame {
             Database.connectToDatabase();
             myMaze = new Maze();
             runGameLoop(scanner);
-        } else {
+        } else if (playChoice.equals("N")) {
             System.out.println("Maybe next time! Goodbye.");
+        } else {
+            System.out.println("Invalid input. Please enter Y or N.");
+            introGame();
         }
-
-        scanner.close();
     }
+
 
     /**
      * Runs the main game loop.
@@ -92,6 +94,7 @@ public class TriviaGame {
                     validInput = true;
                 } catch (IllegalArgumentException e) {
                     System.out.println("Invalid direction. Please enter N, S, E, W, or '1' to save, '2' to load.");
+                    break;
                 }
             }
 
@@ -99,11 +102,14 @@ public class TriviaGame {
                 Question question = Database.getRandomQuestion();
                 askQuestionAndProcessAnswer(question, theScanner, direction);
             } else {
-                System.out.println("Invalid move. Try again.");
+                // The player is on the edge of the maze
+
+                System.out.println("Invalid move. YOU ARE ON THE EDGE OF THE MAZE.");
             }
         }
     }
 
+    // ...
     /**
      * Presents a question to the player, processes the answer, and updates
      * game state accordingly.
@@ -121,41 +127,46 @@ public class TriviaGame {
         System.out.println("C: " + theQuestion.getOptionC());
         System.out.println("D: " + theQuestion.getOptionD());
 
-        System.out.print("Your answer (A, B, C, D): ");
-        String userAnswers = theScanner.nextLine().toUpperCase();
-
         String userAnswer;
-        switch (userAnswers) {
-            case "A":
-                userAnswer = theQuestion.getOptionA();
-                break;
-            case "B":
-                userAnswer = theQuestion.getOptionB();
-                break;
-            case "C":
-                userAnswer = theQuestion.getOptionC();
-                break;
-            case "D":
-                userAnswer = theQuestion.getOptionD();
-                break;
-            default:
-                System.out.println("Invalid choice. Please enter A, B, C, or D.");
-                return; // You might want to return here to avoid further processing
-        }
+        while (true) {
+            System.out.print("Your answer (A, B, C, D): ");
+            String userAnswers = theScanner.nextLine().toUpperCase();
 
-        if (userAnswer.equalsIgnoreCase(theQuestion.getAnswer())) {
-            System.out.println("Correct! Door opens to " + theDirection + " Direction.");
-        } else {
-            System.out.println("Incorrect. Door remains closed.");
-            System.out.println("Failed attempts: " + (incorrectAnswerCount + 1) + "/" + Door.MAX_FAILED_ATTEMPTS);
-            myMaze.getPlayer().moveToPrevPosition();
-            incorrectAnswerCount++;
-
-            if (incorrectAnswerCount == 3) {
-                handleGameEnd(theScanner);
+            switch (userAnswers) {
+                case "A":
+                    userAnswer = theQuestion.getOptionA();
+                    break;
+                case "B":
+                    userAnswer = theQuestion.getOptionB();
+                    break;
+                case "C":
+                    userAnswer = theQuestion.getOptionC();
+                    break;
+                case "D":
+                    userAnswer = theQuestion.getOptionD();
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter A, B, C, or D.");
+                    continue; // Loop back and ask the user for the answer choice again
             }
+
+            if (userAnswer.equalsIgnoreCase(theQuestion.getAnswer())) {
+                System.out.println("Correct! Door opens to " + theDirection + " Direction.");
+            } else {
+                System.out.println("Incorrect. Door remains closed.");
+                System.out.println("Failed attempts: " + (incorrectAnswerCount + 1) + "/3");
+                myMaze.getPlayer().moveToPrevPosition();
+                incorrectAnswerCount++;
+
+                if (incorrectAnswerCount == 3) {
+                    handleGameEnd(theScanner);
+                }
+            }
+            break; // Exit the loop once the user's answer is processed
         }
     }
+// ...
+
 
     /**
      * Handles the end of the game, providing options to restart or end.
@@ -230,7 +241,7 @@ public class TriviaGame {
                 return;
         }
 
-        // 현재 작업 디렉토리에서 파일 경로 찾기
+
         String currentDir = System.getProperty("user.dir");
         String filePath = currentDir + File.separator + saveFileName;
 
@@ -279,4 +290,5 @@ public class TriviaGame {
     }
 
 }
+
 

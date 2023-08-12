@@ -10,7 +10,6 @@ public class Player implements Serializable {
     private int myY;
     private int myPrevX;
     private int myPrevY;
-    private int myHealth;
 
     /**
      * Constructs a new Player object with default values.
@@ -20,7 +19,6 @@ public class Player implements Serializable {
         myY = 0;
         myPrevX = 0;
         myPrevY = 0;
-        myHealth = 100;
     }
 
     /**

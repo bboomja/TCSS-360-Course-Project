@@ -3,9 +3,7 @@ package src.controller;
 import src.model.*;
 
 import java.io.*;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * The TriviaGame class is the main class for the game.
@@ -21,8 +19,8 @@ public class TriviaGame {
     private static final String SAVE_TWO = "save2.txt";
     private static final String SAVE_THREE = "save3.txt";
     private static Maze myMaze; // The maze
-    private static int incorrectAnswerCount = 0;// The number of incorrect answers
-    private static final Set<Question> askedQuestions = new HashSet<>();
+    private static int myIncorrectAnswerCount = 0;// The number of incorrect answers
+    //private static final Set<Question> askedQuestions = new HashSet<>();
 
 
     /**
@@ -133,32 +131,25 @@ public class TriviaGame {
             String userAnswers = theScanner.nextLine().toUpperCase();
 
             switch (userAnswers) {
-                case "A":
-                    userAnswer = theQuestion.getOptionA();
-                    break;
-                case "B":
-                    userAnswer = theQuestion.getOptionB();
-                    break;
-                case "C":
-                    userAnswer = theQuestion.getOptionC();
-                    break;
-                case "D":
-                    userAnswer = theQuestion.getOptionD();
-                    break;
-                default:
+                case "A" -> userAnswer = theQuestion.getOptionA();
+                case "B" -> userAnswer = theQuestion.getOptionB();
+                case "C" -> userAnswer = theQuestion.getOptionC();
+                case "D" -> userAnswer = theQuestion.getOptionD();
+                default -> {
                     System.out.println("Invalid choice. Please enter A, B, C, or D.");
                     continue; // Loop back and ask the user for the answer choice again
+                }
             }
 
             if (userAnswer.equalsIgnoreCase(theQuestion.getAnswer())) {
                 System.out.println("Correct! Door opens to " + theDirection + " Direction.");
             } else {
                 System.out.println("Incorrect. Door remains closed.");
-                System.out.println("Failed attempts: " + (incorrectAnswerCount + 1) + "/3");
+                System.out.println("Failed attempts: " + (myIncorrectAnswerCount + 1) + "/3");
                 myMaze.getPlayer().moveToPrevPosition();
-                incorrectAnswerCount++;
+                myIncorrectAnswerCount++;
 
-                if (incorrectAnswerCount == 3) {
+                if (myIncorrectAnswerCount == 3) {
                     handleGameEnd(theScanner);
                 }
             }
@@ -214,7 +205,7 @@ public class TriviaGame {
      */
     private static void resetGame() {
         myMaze = new Maze();
-        incorrectAnswerCount = 0;
+        myIncorrectAnswerCount = 0;
     }
 
     /**
@@ -227,18 +218,13 @@ public class TriviaGame {
 
         String saveFileName;
         switch (userOption) {
-            case "1":
-                saveFileName = SAVE_ONE;
-                break;
-            case "2":
-                saveFileName = SAVE_TWO;
-                break;
-            case "3":
-                saveFileName = SAVE_THREE;
-                break;
-            default:
+            case "1" -> saveFileName = SAVE_ONE;
+            case "2" -> saveFileName = SAVE_TWO;
+            case "3" -> saveFileName = SAVE_THREE;
+            default -> {
                 System.out.println("Invalid save file option.");
                 return;
+            }
         }
 
 
@@ -265,18 +251,13 @@ public class TriviaGame {
 
         String loadFileName;
         switch (userLoadOption) {
-            case "1":
-                loadFileName = SAVE_ONE;
-                break;
-            case "2":
-                loadFileName = SAVE_TWO;
-                break;
-            case "3":
-                loadFileName = SAVE_THREE;
-                break;
-            default:
+            case "1" -> loadFileName = SAVE_ONE;
+            case "2" -> loadFileName = SAVE_TWO;
+            case "3" -> loadFileName = SAVE_THREE;
+            default -> {
                 System.out.println("Invalid load file option.");
                 return;
+            }
         }
 
         try (FileInputStream fileStream = new FileInputStream(loadFileName);

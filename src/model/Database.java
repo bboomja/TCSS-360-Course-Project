@@ -53,16 +53,6 @@ public class Database {
         }
     }
 
-    /**
-     * Returns a random Question object.
-     *
-     * @return a random Question object from QUESTION_BANK
-     */
- /*   public static Question getRandomQuestion() {
-        Random rand = new Random();
-        int index = rand.nextInt(QUESTION_BANK.size());
-        return QUESTION_BANK.get(index);
-    }*/
     public static Question getRandomQuestion() {
         if (QUESTION_BANK.isEmpty()) {
             // Handle the case where no questions are available

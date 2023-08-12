@@ -1,7 +1,6 @@
 package src.model;
 
 import java.util.*;
-import java.io.Serializable;
 
 /**
  * The Maze class represents the main game environment where the player navigates.
@@ -10,23 +9,15 @@ import java.io.Serializable;
 public class Maze {
     private static final int MAZE_SIZE = 4;
 
-    private final Player player;
-    private final Room[][] rooms;
-    private int incorrectAnswerCount = 0;
-
-    public void incrementIncorrectAnswerCount() {
-        incorrectAnswerCount++;
-        if (incorrectAnswerCount >= 3) {
-            lockAllDoors();
-        }
-    }
+    private final Player myPlayer;
+    private final Room[][] myRooms;
 
     /**
      * Constructs a new Maze object with a default size.
      */
     public Maze() {
-        player = new Player();
-        rooms = new Room[MAZE_SIZE][MAZE_SIZE];
+        myPlayer = new Player();
+        myRooms = new Room[MAZE_SIZE][MAZE_SIZE];
         initializeRooms();
     }
 
@@ -36,7 +27,7 @@ public class Maze {
     private void initializeRooms() {
         for (int x = 0; x < MAZE_SIZE; x++) {
             for (int y = 0; y < MAZE_SIZE; y++) {
-                rooms[x][y] = new Room();
+                myRooms[x][y] = new Room();
             }
         }
     }
@@ -44,25 +35,25 @@ public class Maze {
     /**
      * Moves the player in the specified direction, if possible.
      *
-     * @param direction The direction in which to move the player.
+     * @param theDirection The direction in which to move the player.
      * @return True if the player successfully moved, false otherwise.
      */
-    public boolean movePlayer(Direction direction) {
+    public boolean movePlayer(Direction theDirection) {
         // Get the current coordinates of the player
-        int newX = player.getX();
-        int newY = player.getY();
+        int newX = myPlayer.getX();
+        int newY = myPlayer.getY();
 
         // Check if the desired direction is valid and within the maze bounds
-        if (direction == Direction.N && newY > 0) {
+        if (theDirection == Direction.N && newY > 0) {
             // If moving North is valid, update the new Y coordinate accordingly
             newY--;
-        } else if (direction == Direction.S && newY < MAZE_SIZE - 1) {
+        } else if (theDirection == Direction.S && newY < MAZE_SIZE - 1) {
             // If moving South is valid, update the new Y coordinate accordingly
             newY++;
-        } else if (direction == Direction.E && newX < MAZE_SIZE - 1) {
+        } else if (theDirection == Direction.E && newX < MAZE_SIZE - 1) {
             // If moving East is valid, update the new X coordinate accordingly
             newX++;
-        } else if (direction == Direction.W && newX > 0) {
+        } else if (theDirection == Direction.W && newX > 0) {
             // If moving West is valid, update the new X coordinate accordingly
             newX--;
         } else {
@@ -73,10 +64,10 @@ public class Maze {
         }
 
         // Check if the destination cell is not a wall (i.e., it's a valid move)
-        if (!rooms[newX][newY].isWall()) {
+        if (!myRooms[newX][newY].isWall()) {
             // If the destination cell is not a wall, update the player's position
-            player.setX(newX);
-            player.setY(newY);
+            myPlayer.setX(newX);
+            myPlayer.setY(newY);
             return true; // Return true to indicate that the move is successful
         } else {
             // If the destination cell is a wall, print a message and return false
@@ -97,8 +88,8 @@ public class Maze {
 
     public void lockAllDoors() {
         for (Direction direction : Direction.values()) {
-            int x = player.getX();
-            int y = player.getY();
+            int x = myPlayer.getX();
+            int y = myPlayer.getY();
 
             switch (direction) {
                 case N:
@@ -115,8 +106,8 @@ public class Maze {
                     break;
             }
 
-            if (rooms[x][y] != null && !rooms[x][y].isWall()) {
-                rooms[x][y].setWall(true);
+            if (myRooms[x][y] != null && !myRooms[x][y].isWall()) {
+                myRooms[x][y].setWall(true);
             }
         }
     }
@@ -129,24 +120,8 @@ public class Maze {
      * @return True if the player has reached the exit, false otherwise.
      */
     public boolean isExitReached() {
-        return player.getX() == MAZE_SIZE - 1 && player.getY() == MAZE_SIZE - 1;
+        return myPlayer.getX() == MAZE_SIZE - 1 && myPlayer.getY() == MAZE_SIZE - 1;
     }
-
-    /**
-     * Randomly generates walls in the maze, except for the start and finish positions.
-     */
-    public void generateMaze() {
-        // Randomly create walls in the maze (except the start and finish positions)
-        Random random = new Random();
-        for (int x = 1; x < MAZE_SIZE - 1; x++) {
-            for (int y = 1; y < MAZE_SIZE - 1; y++) {
-                if (random.nextBoolean()) {
-                    rooms[x][y].setWall(true);
-                }
-            }
-        }
-    }
-
 
     /**
      * Returns a string representation of the maze.
@@ -158,11 +133,11 @@ public class Maze {
         StringBuilder mazeString = new StringBuilder();
         for (int y = 0; y < MAZE_SIZE; y++) {
             for (int x = 0; x < MAZE_SIZE; x++) {
-                if (x == player.getX() && y == player.getY()) {
+                if (x == myPlayer.getX() && y == myPlayer.getY()) {
                     mazeString.append("[PLYR]");
                 } else if (x == MAZE_SIZE - 1 && y == MAZE_SIZE - 1) {
                     mazeString.append("[FNSH]");
-                } else if (rooms[x][y].isWall()) {
+                } else if (myRooms[x][y].isWall()) {
                     mazeString.append("[WALL]");
                 } else {
                     mazeString.append("[Maze]");
@@ -174,7 +149,7 @@ public class Maze {
     }
 
     public Player getPlayer() {
-        return player;
+        return myPlayer;
     }
 
     /**

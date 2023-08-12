@@ -4,21 +4,21 @@ package src.model;
  * The Player class represents the player in the game.
  */
 public class Player {
-    private int x;
-    private int y;
-    private int prevX;
-    private int prevY;
-    private int health;
+    private int myX;
+    private int myY;
+    private int myPrevX;
+    private int myPrevY;
+    private int myHealth;
 
     /**
      * Constructs a new Player object with default values.
      */
     public Player() {
-        x = 0;
-        y = 0;
-        prevX = 0;
-        prevY = 0;
-        health = 100;
+        myX = 0;
+        myY = 0;
+        myPrevX = 0;
+        myPrevY = 0;
+        myHealth = 100;
     }
 
     /**
@@ -27,17 +27,17 @@ public class Player {
      * @return The X coordinate.
      */
     public int getX() {
-        return x;
+        return myX;
     }
 
     /**
      * Sets the X coordinate of the player's position.
      *
-     * @param x The new X coordinate.
+     * @param theX The new X coordinate.
      */
-    public void setX(int x) {
-        this.prevX = this.x;
-        this.x = x;
+    public void setX(int theX) {
+        this.myPrevX = theX;
+        this.myX = theX;
     }
 
     /**
@@ -46,38 +46,21 @@ public class Player {
      * @return The Y coordinate.
      */
     public int getY() {
-        return y;
+        return myY;
     }
 
     /**
      * Sets the Y coordinate of the player's position.
      *
-     * @param y The new Y coordinate.
+     * @param theY The new Y coordinate.
      */
-    public void setY(int y) {
-        this.prevY = this.y;
-        this.y = y;
+    public void setY(int theY) {
+        this.myPrevY = theY;
+        this.myY = theY;
     }
     public void moveToPrevPosition() {
-        this.x = this.prevX;
-        this.y = this.prevY;
+        this.myX = myPrevX;
+        this.myY = myPrevY;
     }
 
-    /**
-     * Gets the player's health.
-     *
-     * @return The player's health.
-     */
-    public int getHealth() {
-        return health;
-    }
-
-    /**
-     * Sets the player's health.
-     *
-     * @param health The new player's health.
-     */
-    public void setHealth(int health) {
-        this.health = health;
-    }
 }

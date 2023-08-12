@@ -227,7 +227,6 @@ public class TriviaGame {
             }
         }
 
-
         String currentDir = System.getProperty("user.dir");
         String filePath = currentDir + File.separator + saveFileName;
 
@@ -237,6 +236,7 @@ public class TriviaGame {
             System.out.println("Game saved successfully!");
         } catch (IOException e) {
             System.out.println("Error saving the game.");
+            e.printStackTrace();
         }
     }
 

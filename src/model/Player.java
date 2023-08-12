@@ -1,9 +1,11 @@
 package src.model;
 
+import java.io.Serializable;
+
 /**
  * The Player class represents the player in the game.
  */
-public class Player {
+public class Player implements Serializable {
     private int myX;
     private int myY;
     private int myPrevX;

@@ -1,12 +1,13 @@
 package src.model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * The Maze class represents the main game environment where the player navigates.
  */
 
-public class Maze {
+public class Maze implements Serializable {
     private static final int MAZE_SIZE = 4;
 
     private final Player myPlayer;
@@ -152,36 +153,5 @@ public class Maze {
         return myPlayer;
     }
 
-    /**
-     * Represents a room in the maze.
-     */
-    private static class Room {
-        private boolean wall;
-
-        /**
-         * Constructs a new non-wall room.
-         */
-        public Room() {
-            wall = false;
-        }
-
-        /**
-         * Checks if the room is a wall.
-         *
-         * @return True if the room is a wall, false if it is a non-wall room.
-         */
-        public boolean isWall() {
-            return wall;
-        }
-
-        /**
-         * Sets the room to be a wall or a non-wall.
-         *
-         * @param wall True if the room should be a wall, false if it should be a non-wall room.
-         */
-        public void setWall(boolean wall) {
-            this.wall = wall;
-        }
-    }
 }
 

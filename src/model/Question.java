@@ -1,10 +1,12 @@
 package src.model;
 
+import java.io.Serializable;
+
 /**
  * The Question class represents a question in the game.
  * It stores the question and its answer.
  */
-public class Question {
+public class Question implements Serializable {
 
     /**
      * The question.

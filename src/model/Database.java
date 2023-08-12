@@ -2,6 +2,7 @@ package src.model;
 
 import org.sqlite.SQLiteDataSource;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ import java.util.Random;
  * the Table database and loading the contents into ArrayList that
  * can be accessed via getters.
  */
-public class Database {
+public class Database implements Serializable {
     /**
      * List holding the questions.
      */

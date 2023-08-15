@@ -86,7 +86,6 @@ public class Maze implements Serializable {
      * This method is called from the incrementIncorrectAnswerCount() method.
      *
      */
-
     public void lockAllDoors() {
         for (Direction direction : Direction.values()) {
             int x = myPlayer.getX();
@@ -112,8 +111,6 @@ public class Maze implements Serializable {
             }
         }
     }
-
-
 
     /**
      * Checks if the player has reached the exit of the maze.

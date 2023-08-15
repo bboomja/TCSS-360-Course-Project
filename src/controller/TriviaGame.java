@@ -10,9 +10,11 @@ import java.util.Scanner;
  * It contains the main method for the game.
  * It also contains the maze and the number of incorrect answers.
  *
- * @author Shuaib Ali
- * @author Hyun Jeon
- * @author Yaxye Muxamed
+ *@author Shuaib Ali
+ *@author Hyun Jeon
+ *@author Yaxye Muxamed
+ *@version Summer 2023
+ *
  */
 public class TriviaGame {
     private static final String SAVE_ONE = "save1.txt";
@@ -38,6 +40,7 @@ public class TriviaGame {
         System.out.println("Your goal is to reach the finish by answering questions correctly.");
         System.out.println("If you answer 3 questions incorrectly, the game ends.");
         System.out.print("Are you ready to play (Y/N): ");
+        System.out.println();
 
         Scanner scanner = new Scanner(System.in);
         String playChoice = scanner.nextLine().toUpperCase();
@@ -98,6 +101,7 @@ public class TriviaGame {
 
             if (myMaze.movePlayer(direction)) {
                 Question question = Database.getRandomQuestion();
+                assert question != null;
                 askQuestionAndProcessAnswer(question, theScanner, direction);
             } else {
                 // The player is on the edge of the maze

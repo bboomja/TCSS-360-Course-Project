@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 public class Maze implements Serializable {
     private static final int MAZE_SIZE = 4;
-
     private final Player myPlayer;
     private final Room[][] myRooms;
 

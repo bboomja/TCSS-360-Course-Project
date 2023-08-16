@@ -5,8 +5,12 @@ import java.util.*;
 
 /**
  * The Maze class represents the main game environment where the player navigates.
+ *
+ * @author Hyun Jeon
+ * @author Shuaib Ali
+ * @author Yaxye Muxamed
+ * @version Summer 2023
  */
-
 public class Maze implements Serializable {
     private static final int MAZE_SIZE = 4;
 
@@ -84,7 +88,6 @@ public class Maze implements Serializable {
      * This method is called when the player answers three questions incorrectly.
      * The player will be forced to answer questions correctly to proceed.
      * This method is called from the incrementIncorrectAnswerCount() method.
-     *
      */
     public void lockAllDoors() {
         for (Direction direction : Direction.values()) {

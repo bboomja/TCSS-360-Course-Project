@@ -10,11 +10,10 @@ import java.util.Scanner;
  * It contains the main method for the game.
  * It also contains the maze and the number of incorrect answers.
  *
- *@author Shuaib Ali
- *@author Hyun Jeon
- *@author Yaxye Muxamed
- *@version Summer 2023
- *
+ * @author Shuaib Ali
+ * @author Hyun Jeon
+ * @author Yaxye Muxamed
+ * @version Summer 2023
  */
 public class TriviaGame {
     private static final String SAVE_ONE = "save1.txt";
@@ -22,8 +21,6 @@ public class TriviaGame {
     private static final String SAVE_THREE = "save3.txt";
     private static Maze myMaze; // The maze
     private static int myIncorrectAnswerCount = 0;// The number of incorrect answers
-    //private static final Set<Question> askedQuestions = new HashSet<>();
-
 
     /**
      * The main method for the game.
@@ -60,7 +57,6 @@ public class TriviaGame {
             introGame();
         }
     }
-
 
     /**
      * Runs the main game loop.
@@ -113,7 +109,6 @@ public class TriviaGame {
         }
     }
 
-    // ...
     /**
      * Presents a question to the player, processes the answer, and updates
      * game state accordingly.
@@ -172,7 +167,6 @@ public class TriviaGame {
         }
     }
 
-
     /**
      * Handles the end of the game, providing options to restart or end.
      *
@@ -201,7 +195,6 @@ public class TriviaGame {
         Database.resetUsedQuestions(); // Reset used questions
         Database.connectToDatabase();
     }
-
 
     /**
      * Ends the game and exits the applications.
@@ -259,7 +252,6 @@ public class TriviaGame {
         }
     }
 
-
     /**
      * Loads a saved game state from a specified save file.
      */
@@ -293,7 +285,4 @@ public class TriviaGame {
             System.out.println("Error loading the game.");
         }
     }
-
 }
-
-

@@ -3,7 +3,14 @@ package src.model;
 import java.io.Serializable;
 
 /**
- * Represents a room in the maze.
+ * This class is responsible for managing the properties of a room within the maze.
+ * It provides methods to check whether the room is a wall and to set its wall status.
+ * The class aids in building the maze's layout and determining movement feasibility.
+ *
+ * @author Hyun Jeon
+ * @author Shuaib Ali
+ * @author Yaxye Muxamed
+ * @version Summer 2023
  */
 public class Room implements Serializable {
     private boolean myWall;

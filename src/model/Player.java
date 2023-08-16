@@ -3,19 +3,17 @@ package src.model;
 import java.io.Serializable;
 
 /**
- * The Player class represents the player in the game.
- * The player has a position in the maze.
- * The player can move to a new position in the maze.
- * The player can undo their last move.
- * The player can check if they have reached the exit.
- * The player can check if they have reached a wall.
- *  @author Shuaib Ali
- *  @author Hyun Jeon
- *  @author Yaxye Muxamed
- *  * @version Summer 2023
+ * This class is responsible for managing the player's position
+ * and actions within the game.
+ * It also provides functionality for undoing moves and interacting
+ * with the maze's boundaries.
+ *
+ * @author Shuaib Ali
+ * @author Hyun Jeon
+ * @author Yaxye Muxamed
+ * @version Summer 2023
  */
 public class Player implements Serializable {
-
     private int myX;
     private int myY;
     private int myPrevX;

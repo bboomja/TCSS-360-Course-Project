@@ -15,6 +15,11 @@ import java.util.Random;
  * This class handles connection to the QuestionAnswer table of
  * the Table database and loading the contents into ArrayList that
  * can be accessed via getters.
+ *
+ * @author Hyun Jeon
+ * @author Shuaib Ali
+ * @author Yaxye Muxamed
+ * @version Summer 2023
  */
 public class Database implements Serializable {
     /**

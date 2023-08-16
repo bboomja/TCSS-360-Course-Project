@@ -1,7 +1,6 @@
 package src.model;
 
 import java.io.Serializable;
-import java.util.*;
 
 /**
  * The Maze class represents the main game environment where the player navigates.

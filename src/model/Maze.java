@@ -47,16 +47,16 @@ public class Maze implements Serializable {
         int newY = myPlayer.getY();
 
         // Check if the desired direction is valid and within the maze bounds
-        if (theDirection == Direction.N && newY > 0) {
+        if (theDirection == Direction.North && newY > 0) {
             // If moving North is valid, update the new Y coordinate accordingly
             newY--;
-        } else if (theDirection == Direction.S && newY < MAZE_SIZE - 1) {
+        } else if (theDirection == Direction.South && newY < MAZE_SIZE - 1) {
             // If moving South is valid, update the new Y coordinate accordingly
             newY++;
-        } else if (theDirection == Direction.E && newX < MAZE_SIZE - 1) {
+        } else if (theDirection == Direction.East && newX < MAZE_SIZE - 1) {
             // If moving East is valid, update the new X coordinate accordingly
             newX++;
-        } else if (theDirection == Direction.W && newX > 0) {
+        } else if (theDirection == Direction.West && newX > 0) {
             // If moving West is valid, update the new X coordinate accordingly
             newX--;
         } else {
@@ -93,16 +93,16 @@ public class Maze implements Serializable {
             int y = myPlayer.getY();
 
             switch (direction) {
-                case N:
+                case North:
                     if (y > 0) y--;
                     break;
-                case S:
+                case South:
                     if (y < MAZE_SIZE - 1) y++;
                     break;
-                case E:
+                case East:
                     if (x < MAZE_SIZE - 1) x++;
                     break;
-                case W:
+                case West:
                     if (x > 0) x--;
                     break;
             }

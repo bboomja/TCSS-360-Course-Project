@@ -16,9 +16,9 @@ package src.model;
  * @version Summer 2023
  */
 public enum Direction {
-    N, // North or Up
-    S,// South or Down
-    E,// East  // Right
-    W  // West  // Left
+    North, // North or Up
+    South,// South or Down
+    East,// East  // Right
+    West  // West  // Left
 
 }

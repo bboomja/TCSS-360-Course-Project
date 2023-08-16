@@ -134,21 +134,14 @@ public class TriviaGame {
             String userAnswers = theScanner.nextLine().toUpperCase();
 
             switch (userAnswers) {
-                case "A":
-                    userAnswer = theQuestion.getOptionA();
-                    break;
-                case "B":
-                    userAnswer = theQuestion.getOptionB();
-                    break;
-                case "C":
-                    userAnswer = theQuestion.getOptionC();
-                    break;
-                case "D":
-                    userAnswer = theQuestion.getOptionD();
-                    break;
-                default:
+                case "A" -> userAnswer = theQuestion.getOptionA();
+                case "B" -> userAnswer = theQuestion.getOptionB();
+                case "C" -> userAnswer = theQuestion.getOptionC();
+                case "D" -> userAnswer = theQuestion.getOptionD();
+                default -> {
                     System.out.println("Invalid choice. Please enter A, B, C, or D.");
                     continue; // Loop back and ask the user for the answer choice again
+                }
             }
 
             if (userAnswer.equalsIgnoreCase(theQuestion.getAnswer())) {
@@ -225,18 +218,13 @@ public class TriviaGame {
 
         String saveFileName;
         switch (userOption) {
-            case "1":
-                saveFileName = SAVE_ONE;
-                break;
-            case "2":
-                saveFileName = SAVE_TWO;
-                break;
-            case "3":
-                saveFileName = SAVE_THREE;
-                break;
-            default:
+            case "1" -> saveFileName = SAVE_ONE;
+            case "2" -> saveFileName = SAVE_TWO;
+            case "3" -> saveFileName = SAVE_THREE;
+            default -> {
                 System.out.println("Invalid save file option.");
                 return;
+            }
         }
 
         String currentDir = System.getProperty("user.dir");
@@ -253,7 +241,7 @@ public class TriviaGame {
     }
 
     /**
-     * Loads a saved game state from a specified save file.
+     * Loads a game state from a specified save file.
      */
     private static void loadGame() {
         Scanner scanner = new Scanner(System.in);
@@ -262,18 +250,13 @@ public class TriviaGame {
 
         String loadFileName;
         switch (userLoadOption) {
-            case "1":
-                loadFileName = SAVE_ONE;
-                break;
-            case "2":
-                loadFileName = SAVE_TWO;
-                break;
-            case "3":
-                loadFileName = SAVE_THREE;
-                break;
-            default:
+            case "1" -> loadFileName = SAVE_ONE;
+            case "2" -> loadFileName = SAVE_TWO;
+            case "3" -> loadFileName = SAVE_THREE;
+            default -> {
                 System.out.println("Invalid load file option.");
                 return;
+            }
         }
 
         try (FileInputStream fileStream = new FileInputStream(loadFileName);

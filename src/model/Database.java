@@ -59,6 +59,12 @@ public class Database implements Serializable {
         }
     }
 
+    /**
+     * Gets the list of questions.
+     *
+     * @return The list of questions.
+     */
+
     public static Question getRandomQuestion() {
         if (QUESTION_BANK.isEmpty()) {
             // Handle the case where no questions are available
@@ -76,6 +82,12 @@ public class Database implements Serializable {
         USED_QUESTIONS.add(selectedQuestion); // Mark the question as used
         return selectedQuestion;
     }
+
+    /**
+     * Gets the list of questions.
+     *
+     * @return The list of questions.
+     */
 
     public static void resetUsedQuestions() {
         USED_QUESTIONS.clear();

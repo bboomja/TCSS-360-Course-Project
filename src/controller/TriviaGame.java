@@ -16,9 +16,9 @@ import java.util.Scanner;
  * @version Summer 2023
  */
 public class TriviaGame {
-    private static final String SAVE_ONE = "save1.txt";
-    private static final String SAVE_TWO = "save2.txt";
-    private static final String SAVE_THREE = "save3.txt";
+    private static final String SAVE_ONE = "save1.txt"; // Save file name option 1
+    private static final String SAVE_TWO = "save2.txt"; // Save file name option 2
+    private static final String SAVE_THREE = "save3.txt"; // Save file name option 3
     private static Maze myMaze; // The maze
     private static int myIncorrectAnswerCount = 0;// The number of incorrect answers
 

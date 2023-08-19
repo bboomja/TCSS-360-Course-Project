@@ -32,11 +32,31 @@ public class TriviaGame {
     }
 
     private static void introGame() {
+        System.out.println("╔═╦╗╔╦╗╔═╗╦═╗╔╦╗╦╔═╗╔╗╔╔═╗╦═╗  ╔╗╔╔═╗╦  ╦╔═╗╔╗╔╔═╗");
+        System.out.println("║ ║║║║║╚═╗╠╦╝ ║ ║║ ║║║║║╣ ╠╦╝  ║║║║ ║║  ║╠═╣║║║║╣ ");
+        System.out.println("╩═╝╝╚╝╩╚═╝╩╚═ ╩ ╩╚═╝╝╚╝╚═╝╩╚═  ╝╚╝╚═╝╩═╝╩╩ ╩╝╚╝╚═╝");
+        System.out.println();
+        System.out.println("████████╗██╗  ██╗ █████╗ ██████╗ ████████╗ ██████╗ ██████╗ ");
+        System.out.println("╚══██╔══╝██║  ██║██╔══██╗██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗");
+        System.out.println("   ██║   ███████║███████║██████╔╝   ██║   ██║   ██║██████╔╝");
+        System.out.println("   ██║   ██╔══██║██╔══██║██╔══██╗   ██║   ██║   ██║██╔══██╗");
+        System.out.println("   ██║   ██║  ██║██║  ██║██║  ██║   ██║   ╚██████╔╝██║  ██║");
+        System.out.println("   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝");
+        System.out.println();
+        System.out.println("------------------------------------------------------");
+        System.out.println("      Embark on a quest of knowledge and wits!         ");
+        System.out.println("------------------------------------------------------");
+
         System.out.println("Welcome to our Trivia Maze!");
         System.out.println();
         System.out.println("Our game theme is U.S. History.");
         System.out.println("Your goal is to reach the finish by answering questions correctly.");
         System.out.println("If you answer 3 questions incorrectly, the game ends.");
+        System.out.println();
+        System.out.println("---------------------------------------------------------");
+        System.out.println("Journey through U.S. History in a world of maze!");
+        System.out.println("Answer questions correctly, unlock the path, and triumph!");
+        System.out.println("---------------------------------------------------------");
         System.out.println();
         System.out.print("Are you ready to play (Y/N): ");
         System.out.println();

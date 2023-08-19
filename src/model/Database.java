@@ -83,10 +83,13 @@ public class Database implements Serializable {
         return selectedQuestion;
     }
 
+    public static int getUsedQuestionsSize() {
+        return USED_QUESTIONS.size();
+    }
+
     /**
      * Gets the list of questions.
      *
-     * @return The list of questions.
      */
 
     public static void resetUsedQuestions() {
